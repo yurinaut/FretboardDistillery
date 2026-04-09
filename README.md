@@ -6,7 +6,7 @@ Initial release v2.0
 
 Fretboard Distillery is a free, browser-based guitar transposition tool built for how guitarists actually work. No install, no account, no subscription — just open it and play.
 
-🎸 **[Use it now → fretboarddistillery.github.io](https://fretboarddistillery.github.io)**
+🎸 **[Use it now → FretboardDistillery](https://github.com/yurinaut/FretboardDistillery)**
 
 ---
 
