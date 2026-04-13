@@ -268,7 +268,7 @@ select:focus{outline:none;border-color:var(--accent-dim);}
   <div class="header">
     <h1>Fretboard Distillery</h1>
     <p>Transpose any song · Keep the shapes you love · Let the capo do the math</p>
-    <div class="version">v2.0</div>
+    <div class="version">v2.1</div>
     <div class="hamburger" id="hamburgerBtn">
       <span></span><span></span><span></span>
     </div>
@@ -298,12 +298,13 @@ select:focus{outline:none;border-color:var(--accent-dim);}
       <div class="guide-body">
         <div class="guide-item"><div class="guide-label">Paste or Open a Song</div><div class="guide-desc">Paste chord/lyric text, open a file (.txt, .docx, .cho, .fba), or try the demo. Chords go on the line above lyrics.</div></div>
         <div class="guide-item"><div class="guide-label">Transpose with Shapes + Capo</div><div class="guide-desc">Pick the <strong>Sounding Key</strong> the audience hears, then the <strong>Shape Key</strong> your fingers play. Capo auto-calculates. Or nudge capo manually.</div></div>
-        <div class="guide-item"><div class="guide-label">♯ Nashville Numbers</div><div class="guide-desc">Toggle to replace chords with scale-degree numbers (1, 4, 5⁻, etc.). Numbers stay the same in every key.</div></div>
+        <div class="guide-item"><div class="guide-label">♯ Nashville Numbers</div><div class="guide-desc">Toggle to replace chords with scale-degree numbers (1, 4, 5⁻, etc.). Numbers stay the same in every key. Full NNS reference table in the ☰ menu.</div></div>
         <div class="guide-item"><div class="guide-label">✎ Edit Chord Positions</div><div class="guide-desc">Click the button, click any chord, then <strong>arrow keys</strong> or <strong>Space/Backspace</strong> to slide it over the correct syllable.</div></div>
         <div class="guide-item"><div class="guide-label">Chord Diagrams &amp; Simplified Voicings</div><div class="guide-desc">Each chord shows a fretboard diagram. Common chords include a simpler alternative that's easier to play.</div></div>
-        <div class="guide-item"><div class="guide-label">💾 Save &amp; Reopen</div><div class="guide-desc">Save as <strong>.fba</strong> — stores song, settings, and position edits. Reopen from the Open File tab.</div></div>
-        <div class="guide-item"><div class="guide-label">🖨 Smart Print Preview</div><div class="guide-desc">Auto-fits to fewest pages. Adjust columns, font size (9–12pt), spacing. Optionally include chord diagrams.</div></div>
-        <div class="guide-item"><div class="guide-label">▶ Performance Mode</div><div class="guide-desc">Fullscreen chord sheet with adjustable auto-scroll speed and optional metronome. Access from the ☰ menu.</div></div>
+        <div class="guide-item"><div class="guide-label">☰ Sparse Chart</div><div class="guide-desc">A compact roadmap showing just section names and chord progressions — no lyrics. Available in Performance Mode and Print Preview. Use <strong>📋 Copy</strong> to paste it into any document.</div></div>
+        <div class="guide-item"><div class="guide-label">💾 Save &amp; Reopen</div><div class="guide-desc">Save as <strong>.fba</strong> — stores song, settings, and position edits. Name your file and reopen from the Open File tab.</div></div>
+        <div class="guide-item"><div class="guide-label">🖨 Smart Print Preview</div><div class="guide-desc">Auto-fits to fewest pages. Choose 1 or 2 columns, font size (9–12pt), spacing. Options for chord diagrams and sparse chart mode.</div></div>
+        <div class="guide-item"><div class="guide-label">▶ Performance Mode</div><div class="guide-desc">Fullscreen chord sheet with auto-scroll (15-sec countdown to get ready), adjustable speed, optional metronome with BPM control, sparse chart toggle, and copy to clipboard.</div></div>
       </div>
     </div>
   </div>
@@ -382,6 +383,8 @@ select:focus{outline:none;border-color:var(--accent-dim);}
           <button class="btn btn-sm btn-secondary" id="bpmUp">+</button>
         </div>
       </div>
+      <button class="btn btn-sm btn-secondary" id="perfSparse">☰ Sparse</button>
+      <button class="btn btn-sm btn-secondary" id="perfCopy">📋 Copy</button>
       <button class="btn btn-sm btn-secondary" id="perfClose">✕ Exit</button>
     </div>
     <div class="perf-sheet" id="perfSheet"></div>
@@ -482,6 +485,7 @@ That saved a wretch like me"></textarea>
     <div class="action-row no-print">
       <button class="btn btn-primary" id="printBtn">🖨 Print</button>
       <button class="btn btn-toggle" id="nashvilleToggle">♯ Nashville</button>
+      <button class="btn btn-toggle" id="sparseToggle">☰ Sparse</button>
       <button class="btn btn-edit" id="editToggle">✎ Edit Positions</button>
       <button class="btn btn-primary" id="saveBtn">💾 Save .fba</button>
       <button class="btn btn-secondary" id="perfQuickBtn" title="Performance Mode" style="padding:9px 12px;">▶</button>
@@ -511,7 +515,7 @@ That saved a wretch like me"></textarea>
   </div>
 
   <footer class="app-footer">
-    <p>Released by <strong>Michael Bryant</strong> | Version 2.0</p>
+    <p>Released by <strong>Michael Bryant</strong> | Version 2.1</p>
     <p>This work is supported by users like you. If you found this helpful, please consider <a href="https://ko-fi.com/fretboarddistillery" class="footer-link" target="_blank">leaving a tip or donating here</a>.</p>
   </footer>
 </div>
@@ -545,6 +549,9 @@ That saved a wretch like me"></textarea>
     </label>
     <label>
       <input type="checkbox" id="ppChordDiagrams"> Chord diagrams
+    </label>
+    <label>
+      <input type="checkbox" id="ppSparse"> Sparse chart
     </label>
     <span class="pp-info" id="ppInfo">1 page</span>
     <button class="btn btn-primary btn-sm" id="ppPrint">🖨 Print Now</button>
@@ -735,9 +742,8 @@ function parseSong(text){
 let state={
   originalLines:[],originalKey:'G',originalCapo:0,
   soundingKey:'G',shapeKey:'G',capo:0,
-  loaded:false,nashvilleMode:false,editMode:false,
+  loaded:false,nashvilleMode:false,editMode:false,sparseMode:false,
   title:'',selectedChordIdx:null,
-  // Position edits: map of "lineIdx:chordIdx" -> offset adjustment
   positionEdits:{}
 };
 
@@ -810,32 +816,44 @@ function renderSongSheet(){
 
   const sheet=document.getElementById('songSheet');
   sheet.innerHTML='';
-  sheet.classList.toggle('edit-mode',state.editMode);
+  sheet.classList.toggle('edit-mode',state.editMode&&!state.sparseMode);
 
-  let globalChordIdx=0;
-  displayLines.forEach((line,lineIdx)=>{
-    const div=document.createElement('div');
-    if(/^\s*\[.*\]\s*$/.test(line)){div.className='section-label';div.textContent=line.trim().replace(/[\[\]]/g,'');}
-    else if(!line.trim()){div.className='blank-line';}
-    else if(isChordLine(line)){
-      div.className='chord-line'+(state.nashvilleMode?' nashville':'');
-      if(state.editMode&&!state.nashvilleMode){
-        // Render with clickable chord tokens
-        renderEditableChordLine(div,line,lineIdx);
-      } else {
-        div.textContent=line;
+  if(state.sparseMode){
+    // Generate sparse from pre-Nashville lines so isChordLine works
+    const preNashLines=transposed.map((line,i)=>applyPositionEdits(line,i));
+    const sparse=generateSparseChart(preNashLines);
+    if(state.nashvilleMode){
+      for(const s of sparse){
+        s.progression=s.progression.replace(/([A-G][#b]?(?:m|maj|min|dim|aug|sus|add|[0-9]|\/[A-G][#b]?)*)/g,(m)=>chordToNashville(m,state.shapeKey));
       }
     }
-    else{div.className='lyric-line';div.textContent=line;}
-    sheet.appendChild(div);
-  });
+    renderSparseToContainer(sheet,sparse,'0.82rem');
+  } else {
+    let globalChordIdx=0;
+    displayLines.forEach((line,lineIdx)=>{
+      const div=document.createElement('div');
+      if(/^\s*\[.*\]\s*$/.test(line)){div.className='section-label';div.textContent=line.trim().replace(/[\[\]]/g,'');}
+      else if(!line.trim()){div.className='blank-line';}
+      else if(isChordLine(line)){
+        div.className='chord-line'+(state.nashvilleMode?' nashville':'');
+        if(state.editMode&&!state.nashvilleMode){
+          renderEditableChordLine(div,line,lineIdx);
+        } else {
+          div.textContent=line;
+        }
+      }
+      else{div.className='lyric-line';div.textContent=line;}
+      sheet.appendChild(div);
+    });
+  }
 
   // Meta pills
   let pills=`<span class="meta-pill pill-key">Key: ${state.soundingKey}</span>
     <span class="meta-pill pill-shape">Shapes: ${state.shapeKey} family</span>
     <span class="meta-pill pill-capo">${state.capo===0?'No Capo':'Capo '+state.capo}</span>`;
   if(state.nashvilleMode)pills+=`<span class="meta-pill pill-nash">Nashville</span>`;
-  if(state.editMode)pills+=`<span class="meta-pill pill-edit">✎ Editing</span>`;
+  if(state.sparseMode)pills+=`<span class="meta-pill" style="background:var(--bg-input);color:var(--text-dim);">☰ Sparse</span>`;
+  if(state.editMode&&!state.sparseMode)pills+=`<span class="meta-pill pill-edit">✎ Editing</span>`;
   document.getElementById('songMeta').innerHTML=pills;
 
   // Nashville legend
@@ -968,6 +986,7 @@ function updateDisplays(){
   document.getElementById('shapeKeySelect').value=state.shapeKey;
   const nb=document.getElementById('nashvilleToggle');state.nashvilleMode?nb.classList.add('active'):nb.classList.remove('active');
   const eb=document.getElementById('editToggle');state.editMode?eb.classList.add('active'):eb.classList.remove('active');
+  const sb=document.getElementById('sparseToggle');state.sparseMode?sb.classList.add('active'):sb.classList.remove('active');
 }
 
 function showToast(msg){
@@ -1149,35 +1168,222 @@ let audioCtx=null;
 let scrollAccum=0;
 let lastScrollTime=0;
 
+let perfSparseMode=false;
+
+// ============================================================
+//  SPARSE CHART GENERATOR
+// ============================================================
+function generateSparseChart(lines){
+  // Step 1: Group lines by sections, extract chord progressions
+  const sections=[];
+  let currentSection={name:'Intro',chordLines:[]};
+
+  for(const line of lines){
+    if(/^\s*\[.*\]\s*$/.test(line)){
+      if(currentSection.chordLines.length>0)sections.push(currentSection);
+      currentSection={name:line.trim().replace(/[\[\]]/g,''),chordLines:[]};
+    } else if(isChordLine(line)){
+      const chords=line.trim().split(/\s+/).filter(t=>CHORD_RE.test(t.replace(/[()]/g,'')));
+      if(chords.length>0)currentSection.chordLines.push(chords.join(' - '));
+    }
+  }
+  if(currentSection.chordLines.length>0)sections.push(currentSection);
+
+  // Step 2: For each section, detect repeating cycles
+  function findCyclePattern(arr){
+    // Try cycle lengths from 1 up to half the array length
+    for(let cycleLen=1;cycleLen<=Math.floor(arr.length/2);cycleLen++){
+      if(arr.length%cycleLen!==0)continue;
+      const repeats=arr.length/cycleLen;
+      const cycle=arr.slice(0,cycleLen);
+      let match=true;
+      for(let r=1;r<repeats&&match;r++){
+        for(let j=0;j<cycleLen;j++){
+          if(arr[r*cycleLen+j]!==cycle[j]){match=false;break;}
+        }
+      }
+      if(match&&repeats>1)return{cycle,repeats};
+    }
+    return null;
+  }
+
+  // Step 3: Build sparse output with cycle detection and sub-pattern grouping
+  function collapseSection(chordLines){
+    if(chordLines.length===0)return'';
+
+    // First try: entire section is a repeating cycle
+    const fullCycle=findCyclePattern(chordLines);
+    if(fullCycle){
+      const prog=fullCycle.cycle.join('  |  ');
+      return fullCycle.repeats>1?prog+'  ('+fullCycle.repeats+'x)':prog;
+    }
+
+    // Second try: find repeating sub-groups
+    // Walk through lines, greedily finding consecutive repeated subsequences
+    const parts=[];
+    let i=0;
+    while(i<chordLines.length){
+      // Try to find the longest repeating run starting at i
+      let bestLen=0,bestCount=1;
+      for(let tryLen=1;tryLen<=Math.floor((chordLines.length-i)/2);tryLen++){
+        let count=1;
+        let match=true;
+        while(match&&i+(count+1)*tryLen<=chordLines.length){
+          for(let j=0;j<tryLen;j++){
+            if(chordLines[i+count*tryLen+j]!==chordLines[i+j]){match=false;break;}
+          }
+          if(match)count++;
+        }
+        if(count>1&&tryLen*count>bestLen*bestCount){
+          bestLen=tryLen;bestCount=count;
+        }
+      }
+
+      if(bestLen>0&&bestCount>1){
+        // Found a repeating sub-pattern
+        const subProg=chordLines.slice(i,i+bestLen).join('  |  ');
+        parts.push(subProg+'  ('+bestCount+'x)');
+        i+=bestLen*bestCount;
+      } else {
+        // Single non-repeating line
+        parts.push(chordLines[i]);
+        i++;
+      }
+    }
+
+    return parts.join('  |  ');
+  }
+
+  // Step 4: Merge identical consecutive sections (e.g., Chorus appearing multiple times)
+  const merged=[];
+  for(let i=0;i<sections.length;i++){
+    const sec=sections[i];
+    const prog=collapseSection(sec.chordLines);
+    // Check if previous merged entry has the same base name and same progression
+    const baseName=sec.name.replace(/\s*(I+|[0-9]+)\s*$/,'').trim();
+    if(merged.length>0){
+      const prev=merged[merged.length-1];
+      const prevBase=prev.name.replace(/\s*(I+|[0-9]+)\s*$/,'').trim();
+      if(prevBase===baseName&&prev.rawProg===prog&&prev.name===sec.name){
+        // Same section repeated — increment count
+        prev.repeatCount=(prev.repeatCount||1)+1;
+        continue;
+      }
+    }
+    merged.push({name:sec.name,progression:prog,rawProg:prog,repeatCount:1});
+  }
+
+  // Step 5: Format final output
+  const sparseLines=[];
+  for(const m of merged){
+    let prog=m.progression;
+    // If the section itself repeats (e.g., Chorus x3), and prog already has a count,
+    // multiply them or append section repeat
+    if(m.repeatCount>1){
+      // Check if prog already ends with (Nx) — multiply
+      const existingMatch=prog.match(/\((\d+)x\)\s*$/);
+      if(existingMatch&&prog.indexOf('|')===-1){
+        // Simple case: entire prog is one pattern with count
+        const existingCount=parseInt(existingMatch[1]);
+        prog=prog.replace(/\(\d+x\)\s*$/,'('+(existingCount*m.repeatCount)+'x)');
+      } else {
+        prog+='  ['+m.repeatCount+'x]';
+      }
+    }
+    sparseLines.push({section:m.name,progression:prog});
+  }
+  return sparseLines;
+}
+
+function sparseChartToText(sparseLines,title){
+  let text='';
+  if(title)text+=title+'\n';
+  if(state.soundingKey)text+='Key: '+state.soundingKey+(state.capo>0?'  |  Capo: '+state.capo:'')+'\n';
+  text+='\n';
+  for(const line of sparseLines){
+    text+=line.section+':  '+line.progression+'\n';
+  }
+  return text;
+}
+
+function renderSparseToContainer(container,sparseLines,fontSize){
+  container.innerHTML='';
+  const fs=fontSize||'1rem';
+  for(const line of sparseLines){
+    const row=document.createElement('div');
+    row.style.cssText=`margin-bottom:0.5em;font-size:${fs};`;
+    const label=document.createElement('span');
+    label.style.cssText='font-weight:700;color:var(--accent);margin-right:8px;';
+    label.textContent=line.section+':';
+    const prog=document.createElement('span');
+    prog.style.cssText='color:var(--chord-color);font-weight:600;';
+    prog.textContent='  '+line.progression;
+    row.appendChild(label);
+    row.appendChild(prog);
+    container.appendChild(row);
+  }
+}
+
 function openPerformanceMode(){
   const overlay=document.getElementById('perfOverlay');
   overlay.classList.add('visible');
   document.body.style.overflow='hidden';
+  perfSparseMode=false;
+  document.getElementById('perfSparse').textContent='☰ Sparse';
 
+  renderPerfSheet();
+
+  document.getElementById('perfTitle').textContent=state.title||'Performance Mode';
+  updatePerfDisplay();
+  perfPlaying=false;
+  document.getElementById('perfPlayPause').textContent='▶ Play';
+}
+
+function renderPerfSheet(){
   const transposed=getTransposedLines();
   const sheet=document.getElementById('perfSheet');
   sheet.innerHTML='';
   sheet.scrollTop=0;
   scrollAccum=0;
 
-  transposed.map((line,i)=>{
-    let l=applyPositionEdits(line,i);
-    if(state.nashvilleMode&&isChordLine(l))l=toNashvilleLine(l,state.shapeKey);
-    return l;
-  }).forEach(line=>{
-    const div=document.createElement('div');
-    if(/^\s*\[.*\]\s*$/.test(line)){div.className='section-label';div.textContent=line.trim().replace(/[\[\]]/g,'');}
-    else if(!line.trim()){div.className='blank-line';}
-    else if(isChordLine(line)){div.className='chord-line'+(state.nashvilleMode?' nashville':'');div.textContent=line;}
-    else{div.className='lyric-line';div.textContent=line;}
-    sheet.appendChild(div);
-  });
+  if(perfSparseMode){
+    // Generate sparse from pre-Nashville lines so isChordLine works
+    const preNashLines=transposed.map((line,i)=>applyPositionEdits(line,i));
+    const sparse=generateSparseChart(preNashLines);
+    // If Nashville mode, convert chord tokens in the sparse progressions
+    if(state.nashvilleMode){
+      for(const s of sparse){
+        s.progression=s.progression.replace(/([A-G][#b]?(?:m|maj|min|dim|aug|sus|add|[0-9]|\/[A-G][#b]?)*)/g,(m)=>chordToNashville(m,state.shapeKey));
+      }
+    }
+    // Add title header
+    const hdr=document.createElement('div');
+    hdr.style.cssText='margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);';
+    const ttl=document.createElement('div');
+    ttl.style.cssText="font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--accent);margin-bottom:4px;";
+    ttl.textContent=state.title||'Sparse Chart';
+    hdr.appendChild(ttl);
+    const meta=document.createElement('div');
+    meta.style.cssText='font-size:0.8rem;color:var(--text-dim);';
+    meta.textContent='Key: '+state.soundingKey+(state.capo>0?'  ·  Capo: '+state.capo:'')+(state.nashvilleMode?'  ·  Nashville':'');
+    hdr.appendChild(meta);
+    sheet.appendChild(hdr);
+    renderSparseToContainer(sheet,sparse,'1.1rem');
+  } else {
+    transposed.map((line,i)=>{
+      let l=applyPositionEdits(line,i);
+      if(state.nashvilleMode&&isChordLine(l))l=toNashvilleLine(l,state.shapeKey);
+      return l;
+    }).forEach(line=>{
+      const div=document.createElement('div');
+      if(/^\s*\[.*\]\s*$/.test(line)){div.className='section-label';div.textContent=line.trim().replace(/[\[\]]/g,'');}
+      else if(!line.trim()){div.className='blank-line';}
+      else if(isChordLine(line)){div.className='chord-line'+(state.nashvilleMode?' nashville':'');div.textContent=line;}
+      else{div.className='lyric-line';div.textContent=line;}
+      sheet.appendChild(div);
+    });
+  }
   const pad=document.createElement('div');pad.style.height='80vh';sheet.appendChild(pad);
-
-  document.getElementById('perfTitle').textContent=state.title||'Performance Mode';
-  updatePerfDisplay();
-  perfPlaying=false;
-  document.getElementById('perfPlayPause').textContent='▶ Play';
 }
 
 function closePerformanceMode(){
@@ -1186,7 +1392,7 @@ function closePerformanceMode(){
   document.body.style.overflow='';
   stopScroll();stopMetronome();
   if(countdownTimer){clearInterval(countdownTimer);countdownTimer=null;}
-  perfPlaying=false;
+  perfPlaying=false;perfSparseMode=false;
 }
 
 function updatePerfDisplay(){
@@ -1296,6 +1502,45 @@ document.getElementById('perfMetronome').addEventListener('change',function(){
 document.getElementById('bpmDown').addEventListener('click',()=>{metronomeBPM=Math.max(40,metronomeBPM-4);updatePerfDisplay();if(metronomeOn&&perfPlaying)startMetronome();});
 document.getElementById('bpmUp').addEventListener('click',()=>{metronomeBPM=Math.min(200,metronomeBPM+4);updatePerfDisplay();if(metronomeOn&&perfPlaying)startMetronome();});
 
+// Sparse toggle in performance mode
+document.getElementById('perfSparse').addEventListener('click',()=>{
+  perfSparseMode=!perfSparseMode;
+  document.getElementById('perfSparse').textContent=perfSparseMode?'☰ Full Sheet':'☰ Sparse';
+  renderPerfSheet();
+});
+
+// Copy button in performance mode
+document.getElementById('perfCopy').addEventListener('click',()=>{
+  const transposed=getTransposedLines();
+  const preNashLines=transposed.map((line,i)=>applyPositionEdits(line,i));
+  const displayLines=preNashLines.map(l=>{
+    if(state.nashvilleMode&&isChordLine(l))return toNashvilleLine(l,state.shapeKey);
+    return l;
+  });
+
+  let text='';
+  if(perfSparseMode){
+    const sparse=generateSparseChart(preNashLines);
+    if(state.nashvilleMode){
+      for(const s of sparse){
+        s.progression=s.progression.replace(/([A-G][#b]?(?:m|maj|min|dim|aug|sus|add|[0-9]|\/[A-G][#b]?)*)/g,(m)=>chordToNashville(m,state.shapeKey));
+      }
+    }
+    text=sparseChartToText(sparse,state.title);
+  } else {
+    text=displayLines.join('\n');
+  }
+  navigator.clipboard.writeText(text).then(()=>{
+    showToast('Copied to clipboard');
+  }).catch(()=>{
+    const ta=document.createElement('textarea');
+    ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.select();document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied to clipboard');
+  });
+});
+
 document.querySelectorAll('.input-tab').forEach(t=>t.addEventListener('click',()=>{
   document.querySelectorAll('.input-tab').forEach(x=>x.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));
@@ -1304,9 +1549,11 @@ document.querySelectorAll('.input-tab').forEach(t=>t.addEventListener('click',()
 
 document.getElementById('parseBtn').addEventListener('click',()=>{
   const text=document.getElementById('songInput').value.trim();if(!text)return;
-  // Check if it might be ChordPro
+  // Check if it might be ChordPro format (inline chords like [G]word, not section labels like [Chorus])
   let processed=text;
-  if(text.includes('{title')||text.includes('{key')||(text.includes('[')&&text.match(/\[[A-G]/)))
+  const hasChordProDirs=text.includes('{title')||text.includes('{key');
+  const hasInlineChords=/\[[A-G][#b]?\]/.test(text)&&/\[[A-G][#b]?\]\w/.test(text);
+  if(hasChordProDirs||hasInlineChords)
     processed=parseChordPro(text);
   loadSong(processed);
 });
@@ -1370,6 +1617,7 @@ document.getElementById('shapeKeySelect').addEventListener('change',function(){
 document.getElementById('capoUp').addEventListener('click',()=>{if(state.capo>=11)return;state.capo++;state.soundingKey=computeSoundingKey(state.shapeKey,state.capo);updateDisplays();renderSongSheet();});
 document.getElementById('capoDown').addEventListener('click',()=>{if(state.capo<=0)return;state.capo--;state.soundingKey=computeSoundingKey(state.shapeKey,state.capo);updateDisplays();renderSongSheet();});
 document.getElementById('nashvilleToggle').addEventListener('click',()=>{state.nashvilleMode=!state.nashvilleMode;updateDisplays();renderSongSheet();});
+document.getElementById('sparseToggle').addEventListener('click',()=>{state.sparseMode=!state.sparseMode;updateDisplays();renderSongSheet();});
 document.getElementById('editToggle').addEventListener('click',()=>{
   state.editMode=!state.editMode;
   if(!state.editMode){selectedChordEl=null;}
@@ -1383,6 +1631,7 @@ document.getElementById('ppLayout').addEventListener('change',rebuildPreview);
 document.getElementById('ppFont').addEventListener('change',rebuildPreview);
 document.getElementById('ppSpacing').addEventListener('change',rebuildPreview);
 document.getElementById('ppChordDiagrams').addEventListener('change',rebuildPreview);
+document.getElementById('ppSparse').addEventListener('change',rebuildPreview);
 
 // ============================================================
 //  PRINT PREVIEW ENGINE
@@ -1532,12 +1781,78 @@ function closePrintPreview(){
 
 function rebuildPreview(){
   const lines=getPrintLines();
-  const units=buildUnits(lines);
-  const layoutVal=document.getElementById('ppLayout').value;
+  const isSparse=document.getElementById('ppSparse').checked;
   const fontSize=parseFloat(document.getElementById('ppFont').value);
   const spacing=parseFloat(document.getElementById('ppSpacing').value);
   const showDiagrams=document.getElementById('ppChordDiagrams').checked;
 
+  // Sparse chart — simple single-page render
+  if(isSparse){
+    // Must use pre-Nashville lines so isChordLine works
+    const transposed=getTransposedLines();
+    const preNashLines=transposed.map((line,i)=>applyPositionEdits(line,i));
+    const sparse=generateSparseChart(preNashLines);
+    if(state.nashvilleMode){
+      for(const s of sparse){
+        s.progression=s.progression.replace(/([A-G][#b]?(?:m|maj|min|dim|aug|sus|add|[0-9]|\/[A-G][#b]?)*)/g,(m)=>chordToNashville(m,state.shapeKey));
+      }
+    }
+    const container=document.getElementById('ppPages');
+    container.innerHTML='';
+    const pageDiv=document.createElement('div');
+    pageDiv.className='pp-page';
+    pageDiv.style.fontSize=fontSize+'pt';
+    pageDiv.style.lineHeight=spacing;
+
+    // Header
+    const hdr=document.createElement('div');hdr.className='pp-header';
+    const ttl=document.createElement('div');ttl.className='pp-title';
+    ttl.textContent=(state.title||'Chord Sheet')+' — Sparse Chart';
+    hdr.appendChild(ttl);
+    const meta=document.createElement('div');meta.className='pp-meta';
+    meta.textContent='Key: '+state.soundingKey+'  ·  Shapes: '+state.shapeKey+' family  ·  '+(state.capo===0?'No Capo':'Capo '+state.capo);
+    if(state.nashvilleMode)meta.textContent+='  ·  Nashville Numbers';
+    hdr.appendChild(meta);
+    pageDiv.appendChild(hdr);
+
+    // Sparse content
+    for(const line of sparse){
+      const row=document.createElement('div');
+      row.style.cssText='margin-bottom:0.6em;';
+      const label=document.createElement('span');
+      label.style.cssText='font-weight:700;color:#555;margin-right:8px;';
+      label.textContent=line.section+':';
+      const prog=document.createElement('span');
+      prog.style.cssText='color:#222;font-weight:600;';
+      prog.textContent='  '+line.progression;
+      row.appendChild(label);row.appendChild(prog);
+      pageDiv.appendChild(row);
+    }
+
+    if(showDiagrams){
+      const tc=extractChords(getTransposedLines());
+      const diagSection=document.createElement('div');
+      diagSection.style.cssText='margin-top:20px;padding-top:10px;border-top:1px solid #ccc;display:flex;flex-wrap:wrap;gap:8px;';
+      tc.forEach(c=>{
+        const svg=drawChordSVG(c);if(!svg)return;
+        const wrap=document.createElement('div');wrap.style.cssText='text-align:center;';
+        const nm=document.createElement('div');nm.style.cssText='font-size:8pt;font-weight:600;color:#333;margin-bottom:1px;';
+        nm.textContent=c;wrap.appendChild(nm);
+        const svgDiv=document.createElement('div');
+        svgDiv.innerHTML=svg.replace(/#e8a85c/g,'#444').replace(/#a89e90/g,'#666').replace(/#3d362e/g,'#bbb').replace(/#4a423a/g,'#ccc').replace(/#6b6158/g,'#888');
+        wrap.appendChild(svgDiv);diagSection.appendChild(wrap);
+      });
+      pageDiv.appendChild(diagSection);
+    }
+
+    container.appendChild(pageDiv);
+    document.getElementById('ppInfo').textContent='1 page · Sparse';
+    return;
+  }
+
+  // Full chart mode
+  const units=buildUnits(lines);
+  const layoutVal=document.getElementById('ppLayout').value;
   let cols;
   if(layoutVal==='auto'){
     const fit=autoFit(units);
@@ -1704,7 +2019,7 @@ document.addEventListener('keydown',function(e){
   }
 });
 document.getElementById('resetBtn').addEventListener('click',()=>{
-  state.loaded=false;state.nashvilleMode=false;state.editMode=false;state.positionEdits={};selectedChordEl=null;
+  state.loaded=false;state.nashvilleMode=false;state.editMode=false;state.sparseMode=false;state.positionEdits={};selectedChordEl=null;
   document.getElementById('controlsSection').style.display='none';
   document.getElementById('outputSection').classList.remove('visible');
   document.getElementById('songInput').value='';
