@@ -678,6 +678,8 @@ function drawChordSVG(name){
 function isChordLine(line){
   if(!line.trim())return false;
   if(/^\s*\[.*\]\s*$/.test(line))return false;
+  // Detect chord voicing reference lines like "C  x32010" or "Am  002210" — not chord lines
+  if(/^\s*[A-G][#b]?[a-z0-9*]*\s+[x0-9]{4,6}\s*$/.test(line))return false;
   const tk=line.trim().split(/\s+/);if(!tk.length)return false;
   let cc=0;for(const t of tk)if(CHORD_RE.test(t.replace(/[()]/g,'')))cc++;
   return cc/tk.length>=0.5;
@@ -736,12 +738,37 @@ function parseChordPro(text){
 // ============================================================
 // Clean up tab characters and excessive spacing from pasted/imported text
 function cleanSongText(text){
-  return text.split('\n').map(line=>{
-    // Replace tabs with reasonable spacing (2 spaces)
-    let cleaned=line.replace(/\t/g,'  ');
-    // Collapse runs of 4+ spaces down to 2 (but preserve intentional 2-3 space gaps)
-    cleaned=cleaned.replace(/ {4,}/g,m=>'  '.repeat(Math.ceil(m.length/4)));
-    return cleaned;
+  let cleaned=text;
+
+  // Strip HTML tags (from rich-text paste): <b>Em</b> → Em, <span>C</span> → C
+  cleaned=cleaned.replace(/<br\s*\/?>/gi,'\n');
+  cleaned=cleaned.replace(/<\/?(b|strong|i|em|span|div|p|font|a|u|sup|sub)[^>]*>/gi,'');
+  cleaned=cleaned.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&nbsp;/g,' ').replace(/&#\d+;/g,'');
+
+  // Strip UG [ch]...[/ch] chord tags: [ch]Em[/ch] → Em
+  cleaned=cleaned.replace(/\[ch\](.*?)\[\/ch\]/gi,'$1');
+
+  // Strip UG [tab]...[/tab] wrapper tags
+  cleaned=cleaned.replace(/\[\/?tab\]/gi,'');
+
+  // Strip chord fingering annotations: Em(022000) → Em, C(x32010) → C
+  cleaned=cleaned.replace(/([A-G][#b]?(?:m|maj|min|dim|aug|sus|add|[0-9]|\/[A-G][#b]?)*)\([x0-9]{4,6}\)/g,'$1');
+
+  // Strip line numbers at start of lines: "1. ", "23. ", "  4. "
+  cleaned=cleaned.replace(/^[ \t]*\d+\.[ \t]+/gm,'');
+
+  // Strip leading/trailing pipe characters sometimes added by tab sites
+  cleaned=cleaned.replace(/^\||\|$/gm,'');
+
+  return cleaned.split('\n').map(line=>{
+    // Replace tabs with spaces — use 4 spaces to approximate tab stops for chord alignment
+    let l=line.replace(/\t/g,'    ');
+    // Only collapse excessive spacing on NON-chord lines (lyrics, text)
+    // Chord lines need their spacing preserved to align with lyrics below
+    if(!isChordLine(l)){
+      l=l.replace(/ {4,}/g,m=>'  '.repeat(Math.ceil(m.length/4)));
+    }
+    return l;
   }).join('\n');
 }
 function parseSong(text){
@@ -1567,6 +1594,37 @@ document.querySelectorAll('.input-tab').forEach(t=>t.addEventListener('click',()
   document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));
   t.classList.add('active');document.getElementById('tab-'+t.dataset.tab).classList.add('active');
 }));
+
+// Smart paste: intercept clipboard to clean up HTML from UG and other sites
+document.getElementById('songInput').addEventListener('paste',function(e){
+  // Check if clipboard has HTML content (rich text from websites)
+  const html=e.clipboardData.getData('text/html');
+  const plain=e.clipboardData.getData('text/plain');
+
+  if(html&&html.includes('<')){
+    e.preventDefault();
+    // Use the plain text version but run it through our cleaner
+    let text=plain||'';
+    // If plain text is empty or mangled, extract from HTML
+    if(!text.trim()){
+      const div=document.createElement('div');
+      div.innerHTML=html;
+      text=div.textContent||div.innerText||'';
+    }
+    text=cleanSongText(text);
+
+    // Insert at cursor position (or replace selection)
+    const ta=this;
+    const start=ta.selectionStart;
+    const end=ta.selectionEnd;
+    const before=ta.value.substring(0,start);
+    const after=ta.value.substring(end);
+    ta.value=before+text+after;
+    ta.selectionStart=ta.selectionEnd=start+text.length;
+    showToast('Pasted & cleaned — click Parse to load');
+  }
+  // If no HTML, let the normal paste happen (plain text) — cleanSongText runs at parse time
+});
 
 document.getElementById('parseBtn').addEventListener('click',()=>{
   const text=document.getElementById('songInput').value.trim();if(!text)return;
