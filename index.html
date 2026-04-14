@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Build: 2.2.0 | 2026-04-14 -->
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-2TMMRX7NB6"></script>
 <script>
@@ -13,16 +14,16 @@
   
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Free browser-based guitar transposition tool. Choose your preferred chord shapes, set your key, and the capo calculates automatically. Features Nashville Number System, chord diagrams, simplified voicings, auto-scroll performance mode with metronome, sparse chord charts, and smart print preview.">
-<meta name="keywords" content="guitar transposer, capo calculator, chord transposition, Nashville Number System, guitar chord shapes, chord chart, guitar tool, sparse chord chart, performance mode, worship guitar, acoustic guitar">
+<meta name="description" content="Free browser-based guitar transposition tool with capo calculator. Choose your preferred chord shapes, set your key, and the capo calculates automatically. Features Nashville Number System, chord diagrams, barre chord alternatives, simplified voicings, beginner guitar theory lessons, auto-scroll performance mode with metronome, sparse chord charts, and smart print preview.">
+<meta name="keywords" content="guitar transposer, capo calculator, chord transposition, Nashville Number System, guitar chord shapes, chord chart, guitar tool, sparse chord chart, performance mode, barre chord alternatives, simplified chords, guitar theory for beginners, learn guitar chords, easy guitar chords, acoustic guitar, worship guitar">
 <meta name="author" content="Michael Bryant">
 <meta property="og:title" content="Fretboard Distillery — Free Guitar Transposer with Capo Calculator">
-<meta property="og:description" content="Transpose any song, keep the chord shapes you love, and let the capo do the math. Free, no install, works in any browser.">
+<meta property="og:description" content="Transpose any song, keep the chord shapes you love, and let the capo do the math. Includes beginner theory lessons, barre chord alternatives, and performance mode. Free, no install, works in any browser.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://fretboarddistillery.com">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Fretboard Distillery — Free Guitar Transposer">
-<meta name="twitter:description" content="Transpose any song, keep the chord shapes you love, and let the capo do the math.">
+<meta name="twitter:description" content="Transpose any song, keep the chord shapes you love, and let the capo do the math. Free with beginner theory lessons.">
   
 <title>Fretboard Distillery — Free Guitar Transposer & Capo Calculator</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Libre+Franklin:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -51,8 +52,11 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .header h1{font-family:'DM Serif Display',serif;font-size:2.1rem;color:var(--accent-glow);letter-spacing:0.02em;margin-bottom:4px;}
 .header p{color:var(--text-dim);font-size:0.85rem;font-weight:300;letter-spacing:0.04em;}
 .header .version{font-size:0.68rem;color:var(--text-muted);margin-top:2px;}
-/* Hamburger */
-.hamburger{position:absolute;top:18px;right:0;cursor:pointer;padding:6px;display:flex;flex-direction:column;gap:4px;opacity:0.7;transition:opacity 0.2s;}
+/* Hamburger & nav */
+.header-nav{position:absolute;top:16px;right:0;display:flex;align-items:center;gap:10px;}
+.howto-hint{font-family:'DM Serif Display',serif;font-size:0.78rem;color:var(--accent-dim);cursor:pointer;opacity:0.6;transition:opacity 0.2s;}
+.howto-hint:hover{opacity:1;}
+.hamburger{cursor:pointer;padding:6px;display:flex;flex-direction:column;gap:4px;opacity:0.7;transition:opacity 0.2s;}
 .hamburger:hover{opacity:1;}
 .hamburger span{display:block;width:20px;height:2px;background:var(--accent-glow);border-radius:1px;}
 /* Slide menu */
@@ -289,9 +293,12 @@ select:focus{outline:none;border-color:var(--accent-dim);}
   <div class="header">
     <h1>Fretboard Distillery</h1>
     <p>Transpose any song · Keep the shapes you love · Let the capo do the math</p>
-    <div class="version">v2.1</div>
-    <div class="hamburger" id="hamburgerBtn">
-      <span></span><span></span><span></span>
+    <div class="version">v2.2.0</div>
+    <div class="header-nav">
+      <span class="howto-hint" id="howtoHint">How to »</span>
+      <div class="hamburger" id="hamburgerBtn">
+        <span></span><span></span><span></span>
+      </div>
     </div>
   </div>
 
@@ -304,8 +311,8 @@ select:focus{outline:none;border-color:var(--accent-dim);}
       </div>
       <div class="menu-item" id="menuHowTo">🎸 How To Use</div>
       <div class="menu-item" id="menuGuide">📖 Features</div>
+      <div class="menu-item" id="menuLearn">🎓 Learn Guitar Basics</div>
       <div class="menu-item" id="menuNNS">♯ Nashville Number Table</div>
-      <div class="menu-item" id="menuPerform">▶ Performance Mode</div>
     </div>
   </div>
 
@@ -330,36 +337,133 @@ select:focus{outline:none;border-color:var(--accent-dim);}
     </div>
   </div>
 
-  <!-- How To Modal -->
+  <!-- How To Modal (expanded) -->
   <div class="guide-overlay" id="howToOverlay">
-    <div class="guide-panel" style="max-width:520px;">
+    <div class="guide-panel" style="max-width:580px;">
       <div class="guide-header">
-        <span style="font-family:'DM Serif Display',serif;font-size:1.2rem;color:var(--accent);">How To Use</span>
+        <span style="font-family:'DM Serif Display',serif;font-size:1.2rem;color:var(--accent);">How To Use Fretboard Distillery</span>
         <button class="btn btn-secondary btn-sm" id="howToClose">✕ Close</button>
       </div>
       <div class="guide-body">
         <div class="guide-item" style="border-left-color:var(--key-color);">
-          <div class="guide-label" style="color:var(--key-color);">Getting Started</div>
+          <div class="guide-label" style="color:var(--key-color);">1. Load Your Song</div>
           <div class="guide-desc">
-            <strong>1.</strong> Paste your chord sheet into the input area, or open a file (.txt, .docx, .cho).<br>
-            <strong>2.</strong> Click <strong>Parse & Load Song</strong>.<br>
-            <strong>3.</strong> Pick your favorite chord shapes under <strong>Play Shapes In</strong>.<br>
-            <strong>4.</strong> Adjust the <strong>Sounding Key</strong> to match the song — the capo calculates for you.<br>
-            <strong>5.</strong> Fine-tune chord positions with <strong>✎ Edit Positions</strong> if needed.<br>
-            <strong>6.</strong> Save your work with <strong>💾 Save .fba</strong> or print with <strong>🖨 Print</strong>.
+            Paste a chord sheet directly into the input area — chords go on the line above the lyrics they belong to. Section labels like <strong>[Verse]</strong> and <strong>[Chorus]</strong> help organize the chart.<br><br>
+            <strong>From a website?</strong> On the chord site, select the chords and lyrics, copy them (Ctrl+C / Cmd+C), and paste into Fretboard Distillery. We automatically clean up formatting from sites like Ultimate Guitar.<br><br>
+            You can also open files: <strong>.txt</strong>, <strong>.docx</strong> (Word), <strong>.cho</strong> (ChordPro), or <strong>.fba</strong> (previously saved from this tool).
           </div>
         </div>
         <div class="guide-item" style="border-left-color:var(--shape-color);">
-          <div class="guide-label" style="color:var(--shape-color);">Performance Mode</div>
+          <div class="guide-label" style="color:var(--shape-color);">2. Choose Your Shapes &amp; Key</div>
           <div class="guide-desc">
-            <strong>1.</strong> Load and set up your song first.<br>
-            <strong>2.</strong> Click the <strong>▶</strong> button (or find it in the ☰ menu).<br>
-            <strong>3.</strong> Adjust scroll speed with the <strong>+/−</strong> buttons before you start.<br>
-            <strong>4.</strong> Hit <strong>▶ Play</strong> — a 15-second countdown gives you time to grab your guitar.<br>
-            <strong>5.</strong> Turn on the <strong>Metronome</strong> toggle and set your BPM if you want a click track.<br>
-            <strong>6.</strong> Hit <strong>⏸ Pause</strong> anytime, or <strong>✕ Exit</strong> to return.
+            <strong>Sounding Key</strong> is what the audience hears — set this to match the original song or your singer's range.<br><br>
+            <strong>Play Shapes In</strong> is the chord family your fingers actually play. If you're comfortable with G, C, D, Em shapes, pick G. The tool calculates the capo position automatically.<br><br>
+            <strong>Why this matters:</strong> A song in the key of Bb is tough to play without barre chords. But if you set Shapes to G and Sounding Key to Bb, the tool tells you: capo on fret 3, play your familiar G shapes. Same sound, easier hands.
           </div>
         </div>
+        <div class="guide-item" style="border-left-color:var(--capo-color);">
+          <div class="guide-label" style="color:var(--capo-color);">3. Fine-Tune</div>
+          <div class="guide-desc">
+            <strong>✎ Edit Positions:</strong> Click any chord and use arrow keys or Space/Backspace to slide it left or right, lining it up precisely over the syllable where the chord change happens.<br><br>
+            <strong>♯ Nashville:</strong> Toggles chord names to scale-degree numbers. Useful when your band leader calls out numbers instead of chord names.<br><br>
+            <strong>☰ Sparse:</strong> Shows a compact roadmap — just section names and chord progressions, no lyrics. Great when you know the words and just need the changes.
+          </div>
+        </div>
+        <div class="guide-item" style="border-left-color:var(--accent);">
+          <div class="guide-label" style="color:var(--accent);">4. Perform, Print, or Save</div>
+          <div class="guide-desc">
+            <strong>▶ Performance Mode:</strong> Fullscreen chord sheet with auto-scroll. Hit Play and a 15-second countdown gives you time to grab your guitar. Adjust speed with +/−. Turn on the metronome for a click track — it starts immediately when you hit Play so you can count in.<br><br>
+            <strong>🖨 Print:</strong> Opens a smart preview that auto-fits your song to the fewest pages. Choose 1 or 2 columns, font size, and whether to include chord diagrams or a sparse chart.<br><br>
+            <strong>💾 Save:</strong> Saves your song as a .fba file with all your settings — key, capo, position edits, everything. Reopen it anytime from the Open File tab.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Learn Guitar Basics Modal -->
+  <div class="guide-overlay" id="learnOverlay">
+    <div class="guide-panel" style="max-width:620px;">
+      <div class="guide-header">
+        <span style="font-family:'DM Serif Display',serif;font-size:1.2rem;color:var(--accent);">Learn Guitar Basics</span>
+        <button class="btn btn-secondary btn-sm" id="learnClose">✕ Close</button>
+      </div>
+      <div class="guide-body">
+
+        <div class="guide-item" style="border-left-color:var(--key-color);">
+          <div class="guide-label" style="color:var(--key-color);">The 12 Notes — That's All There Is</div>
+          <div class="guide-desc">
+            Music uses only 12 notes, then they repeat. In order:<br><br>
+            <strong style="color:var(--chord-color);">A → A#/Bb → B → C → C#/Db → D → D#/Eb → E → F → F#/Gb → G → G#/Ab → (back to A)</strong><br><br>
+            Notice two spots where there's <strong>no sharp/flat between them</strong>: <strong>B→C</strong> and <strong>E→F</strong>. These are only one fret apart on guitar. Every other pair is two frets apart. This is why the Sounding Key dropdown looks the way it does — it's the complete set of notes.<br><br>
+            <em style="color:var(--accent);">Try it:</em> Look at the Sounding Key dropdown. Count from A to A# — that's 1 fret (1 semitone). Count from B to C — also 1 fret. But A to B is 2 frets.
+          </div>
+        </div>
+
+        <div class="guide-item" style="border-left-color:var(--capo-color);">
+          <div class="guide-label" style="color:var(--capo-color);">What a Capo Actually Does</div>
+          <div class="guide-desc">
+            A capo clamps across all six strings at a fret, raising everything by that many semitones. It's like moving the guitar's nut up the neck.<br><br>
+            <strong>Capo on fret 2</strong> = everything sounds 2 semitones higher. Your G shape now <em>sounds</em> like an A. Your C shape sounds like D. Your D shape sounds like E.<br><br>
+            That's all transposing is — shifting every chord by the same number of semitones. The capo does it mechanically so your fingers don't have to learn new shapes.<br><br>
+            <em style="color:var(--accent);">Try it:</em> Load a song, set Shapes to G, then change the Sounding Key and watch the capo number change. Each step in the key = one more fret on the capo.
+          </div>
+        </div>
+
+        <div class="guide-item" style="border-left-color:var(--shape-color);">
+          <div class="guide-label" style="color:var(--shape-color);">Why Some Keys Are Harder Than Others</div>
+          <div class="guide-desc">
+            Guitar-friendly keys (G, C, D, A, E) have lots of open chord shapes — your fingers use open strings, which sound full and are easy to play.<br><br>
+            Keys like Bb, Eb, Ab, and F don't have natural open shapes. They traditionally require <strong>barre chords</strong> — pressing your index finger across all six strings. Barre chords are hard for beginners and tiring for everyone.<br><br>
+            <strong>The solution:</strong> use a capo to convert any key into one with open shapes. That's the whole point of the <em>Play Shapes In</em> selector — you pick the easy shapes, and the tool figures out where to put the capo.<br><br>
+            <em style="color:var(--accent);">Try it:</em> Set Sounding Key to Bb (a hard key). Now set Shapes to G. The tool says Capo 3 — and all your chords are familiar G-family shapes.
+          </div>
+        </div>
+
+        <div class="guide-item" style="border-left-color:var(--nash-color);">
+          <div class="guide-label" style="color:var(--nash-color);">The 1-4-5-6 Pattern — The DNA of Most Songs</div>
+          <div class="guide-desc">
+            Most popular songs use the same <em>relationships</em> between chords, just in different keys. These relationships are numbered 1 through 7 (the Nashville Number System):<br><br>
+            <strong>1</strong> = home base (the key chord)<br>
+            <strong>4</strong> = the lift (feels like rising)<br>
+            <strong>5</strong> = the tension (wants to resolve back to 1)<br>
+            <strong>6</strong> = the emotional one (minor, pulls at heartstrings)<br><br>
+            In the key of G: <strong>1=G, 4=C, 5=D, 6=Em</strong><br>
+            In the key of C: <strong>1=C, 4=F, 5=G, 6=Am</strong><br>
+            In the key of D: <strong>1=D, 4=G, 5=A, 6=Bm</strong><br><br>
+            Same pattern, different starting point. Once you hear 1-4-5-6 in one key, you'll recognize it everywhere.<br><br>
+            <em style="color:var(--accent);">Try it:</em> Toggle Nashville Numbers on a loaded song. Watch how the same numbers appear regardless of which key you transpose to.
+          </div>
+        </div>
+
+        <div class="guide-item" style="border-left-color:var(--chord-color);">
+          <div class="guide-label" style="color:var(--chord-color);">Barre Chord Alternatives — You Don't Need Them</div>
+          <div class="guide-desc">
+            Barre chords are the #1 reason beginners get frustrated. The good news: <strong>there's almost always an easier voicing that sounds just as good</strong>.<br><br>
+            <strong>F → Fmaj7</strong> (xx3210) — Drop the barre completely. Beautiful, dreamy sound. Nobody in the audience will know the difference.<br><br>
+            <strong>Bm → Bm7</strong> (x20202) — Completely open, no barre. Works great for strumming.<br><br>
+            <strong>B → B7</strong> (x21202) — Open voicing with a nice bluesy pull. Perfect as a V chord.<br><br>
+            <strong>Bb → use a capo!</strong> If a song uses Bb, set Shapes to A and Capo 1, or Shapes to G and Capo 3. Problem solved.<br><br>
+            <strong>F#m → F#m7</strong> (202200) — Open voicing, no barre needed.<br><br>
+            <strong>C#m → C#m7</strong> (x42000) — Partial shape, no barre.<br><br>
+            Fretboard Distillery flags barre chords automatically and suggests easier alternatives in the chord diagram section below your song. Look for the green "→ try" suggestions.<br><br>
+            <em style="color:var(--accent);">The big insight:</em> Barre chords exist to move open shapes up the neck. But if you have a capo, the capo does that job for you. Pick easy shapes, let the capo handle the rest.
+          </div>
+        </div>
+
+        <div class="guide-item" style="border-left-color:var(--text-dim);">
+          <div class="guide-label" style="color:var(--text-dim);">Chord Families — Why Certain Chords Belong Together</div>
+          <div class="guide-desc">
+            Every key has a "family" of 7 chords that naturally sound good together. Three are major (bright), three are minor (moody), and one is diminished (tense, rarely used):<br><br>
+            <strong>Major chords:</strong> 1, 4, 5 (the backbone)<br>
+            <strong>Minor chords:</strong> 2m, 3m, 6m (the color)<br>
+            <strong>Diminished:</strong> 7dim (the spice — used sparingly)<br><br>
+            In the key of G: G(1), Am(2m), Bm(3m), C(4), D(5), Em(6m), F#dim(7dim)<br><br>
+            This is why G, C, D, and Em show up together so often — they're family. The Nashville Number Table in the ☰ menu shows every chord family for all 12 keys.<br><br>
+            <em style="color:var(--accent);">Try it:</em> Open the Nashville Number Table from the menu. Find the key of your song and see which chords "belong." You'll notice most songs stick to 1, 4, 5, and 6.
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -421,7 +525,6 @@ select:focus{outline:none;border-color:var(--accent-dim);}
     <div class="input-tabs">
       <button class="input-tab active" data-tab="paste">Paste Chords</button>
       <button class="input-tab" data-tab="file">Open File</button>
-      <button class="input-tab" data-tab="url">From URL</button>
     </div>
 
     <div class="tab-content active" id="tab-paste">
@@ -434,7 +537,8 @@ Em             C       G    D
 That saved a wretch like me"></textarea>
       <div class="format-hint">
         Chords on the line above lyrics. Sections: <code>[Verse]</code> <code>[Chorus]</code>. 
-        Metadata: <code>Key: G</code> <code>Capo: 2</code> <code>Title: Song Name</code>
+        Metadata: <code>Key: G</code> <code>Capo: 2</code> <code>Title: Song Name</code><br>
+        <strong style="color:var(--accent-dim);">From a website?</strong> Select the chords &amp; lyrics on the page, copy (Ctrl+C / Cmd+C), and paste here. We'll clean up the formatting automatically.
       </div>
     </div>
 
@@ -448,17 +552,6 @@ That saved a wretch like me"></textarea>
       </div>
       <div class="format-hint" style="margin-top:10px;">
         Supported: <code>.txt</code> <code>.cho</code> (ChordPro) <code>.docx</code> (Word) <code>.fba</code> (Fretboard Distillery native)
-      </div>
-    </div>
-
-    <div class="tab-content" id="tab-url">
-      <div class="url-row">
-        <input type="text" class="url-input" id="urlInput" placeholder="Paste a URL...">
-        <button class="btn btn-primary" id="fetchBtn">Fetch</button>
-      </div>
-      <div id="urlError" style="display:none;margin-top:8px;padding:8px 12px;background:rgba(220,80,80,0.12);border:1px solid rgba(220,80,80,0.3);border-radius:6px;font-size:0.75rem;color:#e07070;line-height:1.4;"></div>
-      <div class="format-hint" style="margin-top:10px;">
-        Most tab sites block direct browser fetches (CORS). Copy/paste usually works better.
       </div>
     </div>
 
@@ -476,9 +569,9 @@ That saved a wretch like me"></textarea>
         <div class="control-label label-key">◆ Sounding Key</div>
         <div class="control-value val-key" id="soundingKeyDisplay">G</div>
         <select id="soundingKeySelect">
-          <option>C</option><option>C#/Db</option><option>D</option><option>D#/Eb</option>
-          <option>E</option><option>F</option><option>F#/Gb</option><option selected>G</option>
-          <option>G#/Ab</option><option>A</option><option>A#/Bb</option><option>B</option>
+          <option>A</option><option>A#/Bb</option><option>B</option><option>C</option><option>C#/Db</option>
+          <option>D</option><option>D#/Eb</option><option>E</option><option>F</option><option>F#/Gb</option>
+          <option selected>G</option><option>G#/Ab</option>
         </select>
       </div>
       <div class="control-box">
@@ -536,7 +629,7 @@ That saved a wretch like me"></textarea>
   </div>
 
   <footer class="app-footer">
-    <p>Released by <strong>Michael Bryant</strong> | Version 2.1</p>
+    <p>Released by <strong>Michael Bryant</strong> | Version 2.2.0</p>
     <p>This work is supported by users like you. If you found this helpful, please consider <a href="https://ko-fi.com/fretboarddistillery" class="footer-link" target="_blank">leaving a tip or donating here</a>.</p>
   </footer>
 </div>
@@ -641,17 +734,26 @@ const CHORD_DB={
   'F':{f:[-1,-1,3,2,1,1],sf:1,tip:'Partial barre — skip bass'},'Fmaj7':{f:[-1,-1,3,2,1,0],sf:1,tip:'Easier than F, beautiful'},'Fadd9':{f:[-1,-1,3,2,1,3],sf:1},
   'Bb':{f:[-1,1,3,3,3,1],sf:1},'Bbmaj7':{f:[-1,1,3,2,3,1],sf:1},
   'Dm':{f:[-1,-1,0,2,3,1],sf:1},'Dm7':{f:[-1,-1,0,2,1,1],sf:1},
-  'Gm':{f:[3,5,5,3,3,3],sf:3},
+  'Gm':{f:[3,5,5,3,3,3],sf:3},'Gm7':{f:[3,5,3,3,3,3],sf:3,tip:'Easier than Gm barre'},
   'F#m':{f:[2,4,4,2,2,2],sf:1},'F#m7':{f:[2,0,2,2,2,0],sf:1,tip:'Open voicing — no barre'},
   'C#m':{f:[-1,4,6,6,5,4],sf:4},'C#m7':{f:[-1,4,2,4,0,0],sf:1,tip:'Partial shape, no barre'},
   'G#m':{f:[4,6,6,4,4,4],sf:4},'Eb':{f:[-1,-1,1,3,4,3],sf:1},
   'Ab':{f:[4,6,6,5,4,4],sf:4},'Bbm':{f:[-1,1,3,3,2,1],sf:1},
 };
-const WORSHIP_ALT={
-  'C':{to:'Cadd9',why:'Fuller sound, very popular'},'Am':{to:'Am7',why:'Lift ring finger from Am'},
-  'Em':{to:'Em7',why:'One finger — minimal movement'},'Bm':{to:'Bm7',why:'Open voicing avoids barre'},
-  'F':{to:'Fmaj7',why:'No barre needed, dreamy tone'},'D':{to:'Dsus2',why:'Open high E rings beautifully'},
-  'A':{to:'Asus2',why:'Lift one finger, open sound'},'F#m':{to:'F#m7',why:'Open voicing — skip the barre'},
+// Simplified chord alternatives — barre chord replacements and easier voicings
+const CHORD_ALT={
+  'C':{to:'Cadd9',why:'Fuller sound, very popular'},
+  'Am':{to:'Am7',why:'Lift ring finger from Am'},
+  'Em':{to:'Em7',why:'One finger — minimal movement'},
+  'Bm':{to:'Bm7',why:'Open voicing avoids barre'},
+  'F':{to:'Fmaj7',why:'No barre needed, dreamy tone'},
+  'D':{to:'Dsus2',why:'Open high E rings beautifully'},
+  'A':{to:'Asus2',why:'Lift one finger, open sound'},
+  'F#m':{to:'F#m7',why:'Open voicing — skip the barre'},
+  'B':{to:'B7',why:'Open voicing, bluesy pull'},
+  'Bb':{to:'Bbmaj7',why:'Easier partial barre shape'},
+  'C#m':{to:'C#m7',why:'Partial shape, no full barre'},
+  'Gm':{to:'Gm7',why:'Easier partial voicing'},
 };
 
 function drawChordSVG(name){
@@ -921,7 +1023,7 @@ function renderSongSheet(){
   for(const c of tc){
     const card=document.createElement('div');card.className='chord-card';
     const nm=document.createElement('div');nm.className='chord-card-name';nm.textContent=c;card.appendChild(nm);
-    const wa=WORSHIP_ALT[c];
+    const wa=CHORD_ALT[c];
     if(wa){const alt=document.createElement('div');alt.className='chord-card-alt';alt.textContent='→ try '+wa.to;alt.title=wa.why;card.appendChild(alt);}
     const svg=drawChordSVG(c);
     if(svg){const w=document.createElement('div');w.innerHTML=svg;card.appendChild(w);const dd=CHORD_DB[c];if(dd&&dd.tip){const tip=document.createElement('div');tip.className='chord-card-tip';tip.textContent=dd.tip;card.appendChild(tip);}}
@@ -1154,6 +1256,14 @@ document.getElementById('menuHowTo').addEventListener('click',()=>{menuOv.classL
 document.getElementById('howToClose').addEventListener('click',()=>document.getElementById('howToOverlay').classList.remove('visible'));
 document.getElementById('howToOverlay').addEventListener('click',function(e){if(e.target===this)this.classList.remove('visible');});
 
+// "How to >>" hint opens menu
+document.getElementById('howtoHint').addEventListener('click',()=>menuOv.classList.add('visible'));
+
+// Learn Guitar Basics
+document.getElementById('menuLearn').addEventListener('click',()=>{menuOv.classList.remove('visible');document.getElementById('learnOverlay').classList.add('visible');});
+document.getElementById('learnClose').addEventListener('click',()=>document.getElementById('learnOverlay').classList.remove('visible'));
+document.getElementById('learnOverlay').addEventListener('click',function(e){if(e.target===this)this.classList.remove('visible');});
+
 // Quick Performance button
 document.getElementById('perfQuickBtn').addEventListener('click',()=>{
   if(!state.loaded){showToast('Load a song first');return;}
@@ -1199,11 +1309,6 @@ function buildNNSTable(){
 }
 
 // Performance Mode
-document.getElementById('menuPerform').addEventListener('click',()=>{
-  menuOv.classList.remove('visible');
-  if(!state.loaded){showToast('Load a song first');return;}
-  openPerformanceMode();
-});
 document.getElementById('perfClose').addEventListener('click',closePerformanceMode);
 
 let perfScrollRAF=null;
@@ -1517,8 +1622,16 @@ document.getElementById('perfPlayPause').addEventListener('click',()=>{
     },1000);
   }
 });
-document.getElementById('perfSlower').addEventListener('click',()=>{perfSpeed=Math.max(0.1,Math.round((perfSpeed-0.1)*10)/10);updatePerfDisplay();});
-document.getElementById('perfFaster').addEventListener('click',()=>{perfSpeed=Math.min(1.5,Math.round((perfSpeed+0.1)*10)/10);updatePerfDisplay();});
+document.getElementById('perfSlower').addEventListener('click',()=>{
+  const step=perfSpeed<=0.5?0.02:0.1;
+  perfSpeed=Math.max(0.02,Math.round((perfSpeed-step)*100)/100);
+  updatePerfDisplay();
+});
+document.getElementById('perfFaster').addEventListener('click',()=>{
+  const step=perfSpeed<0.5?0.02:0.1;
+  perfSpeed=Math.min(1.5,Math.round((perfSpeed+step)*100)/100);
+  updatePerfDisplay();
+});
 
 // Metronome
 function startMetronome(){
@@ -2093,6 +2206,7 @@ document.addEventListener('keydown',function(e){
     else if(document.getElementById('ppOverlay').classList.contains('visible')){closePrintPreview();}
     else if(document.getElementById('guideOverlay').classList.contains('visible')){document.getElementById('guideOverlay').classList.remove('visible');}
     else if(document.getElementById('howToOverlay').classList.contains('visible')){document.getElementById('howToOverlay').classList.remove('visible');}
+    else if(document.getElementById('learnOverlay').classList.contains('visible')){document.getElementById('learnOverlay').classList.remove('visible');}
     else if(document.getElementById('nnsOverlay').classList.contains('visible')){document.getElementById('nnsOverlay').classList.remove('visible');}
     else if(document.getElementById('menuOverlay').classList.contains('visible')){document.getElementById('menuOverlay').classList.remove('visible');}
   }
@@ -2106,23 +2220,6 @@ document.getElementById('resetBtn').addEventListener('click',()=>{
   document.getElementById('editHint').classList.remove('visible');
   updateDisplays();window.scrollTo({top:0,behavior:'smooth'});
 });
-document.getElementById('fetchBtn').addEventListener('click',async()=>{
-  const url=document.getElementById('urlInput').value.trim();if(!url)return;
-  const btn=document.getElementById('fetchBtn');btn.innerHTML='<span class="spinner"></span>...';btn.disabled=true;
-  const errEl=document.getElementById('urlError');errEl.style.display='none';
-  try{
-    const r=await fetch(url);
-    if(!r.ok)throw new Error('HTTP '+r.status);
-    const t=await r.text();const p=new DOMParser();const d=p.parseFromString(t,'text/html');
-    const pre=d.querySelector('pre,.js-store,.ugm-b-tab,[class*="Tablature"],[class*="chord"]');
-    if(pre){document.getElementById('songInput').value=pre.textContent;document.querySelectorAll('.input-tab')[0].click();errEl.style.display='none';}
-    else{errEl.innerHTML='<strong>No chord data found</strong> on that page. The site may use JavaScript rendering that blocks extraction. Try copying the chord sheet directly and pasting it in the Paste tab.';errEl.style.display='block';}
-  }catch(e){
-    errEl.innerHTML='<strong>Fetch failed:</strong> '+e.message+'. Most tab sites (Ultimate Guitar, etc.) block direct browser access. Copy the chord sheet from the site and paste it in the Paste tab instead.';errEl.style.display='block';
-  }
-  btn.innerHTML='Fetch';btn.disabled=false;
-});
-
 // Deselect chord when clicking outside
 document.getElementById('songSheet').addEventListener('click',function(e){
   if(!e.target.classList.contains('chord-token')&&selectedChordEl){
