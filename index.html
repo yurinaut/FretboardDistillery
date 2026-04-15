@@ -252,6 +252,12 @@ select:focus{outline:none;border-color:var(--accent-dim);}
 
 /* Footer */
 .app-footer{margin-top:40px;padding:16px 20px;border-top:1px solid var(--border);font-size:0.75rem;color:var(--text-muted);text-align:center;line-height:1.6;}
+
+/* Song title input */
+.song-title-input{flex:1;background:none;border:none;border-bottom:1px solid transparent;font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--accent);padding:4px 2px;outline:none;transition:border-color 0.2s;}
+.song-title-input:hover{border-bottom-color:var(--border);}
+.song-title-input:focus{border-bottom-color:var(--accent-dim);}
+.song-title-input::placeholder{color:var(--text-muted);font-style:italic;}
 .app-footer strong{color:var(--text-dim);}
 .app-footer .footer-link{color:var(--accent);text-decoration:none;transition:color 0.2s;}
 .app-footer .footer-link:hover{color:var(--accent-glow);}
@@ -278,13 +284,15 @@ select:focus{outline:none;border-color:var(--accent-dim);}
 .pp-break{width:100%;border:none;border-top:1px dashed #ccc;margin:8px 0;}
 
 /* Print */
+@page{margin:0;}
 @media print{
   body{background:white;color:black;}
   body::before,.app,.toast{display:none!important;}
   .pp-overlay{display:block!important;position:static;background:none;padding:0;overflow:visible;}
-  .pp-controls{display:none!important;}
-  .pp-page{box-shadow:none;margin:0;padding:48px 52px;border-radius:0;page-break-after:always;width:100%;min-height:auto;}
+  .pp-controls,.pp-print-tip{display:none!important;}
+  .pp-page{box-shadow:none;margin:0;padding:36px 40px;border-radius:0;page-break-after:always;width:100%;min-height:auto;}
   .pp-page:last-child{page-break-after:avoid;}
+  .pp-columns{page-break-inside:avoid;}
 }
 .print-title{display:none;}
 </style>
@@ -384,13 +392,214 @@ select:focus{outline:none;border-color:var(--accent-dim);}
 
   <!-- Learn Guitar Basics Modal -->
   <div class="guide-overlay" id="learnOverlay">
-    <div class="guide-panel" style="max-width:620px;">
+    <div class="guide-panel" style="max-width:640px;">
       <div class="guide-header">
         <span style="font-family:'DM Serif Display',serif;font-size:1.2rem;color:var(--accent);">Learn Guitar Basics</span>
         <button class="btn btn-secondary btn-sm" id="learnClose">✕ Close</button>
       </div>
       <div class="guide-body">
 
+        <!-- 1-4-5-6 PATTERN — MOVED TO TOP -->
+        <div class="guide-item" style="border-left-color:var(--nash-color);">
+          <div class="guide-label" style="color:var(--nash-color);">The 1-4-5-6 Pattern — The DNA of Most Songs</div>
+          <div class="guide-desc">
+            Most popular songs use the same <em>relationships</em> between chords, just in different keys. These relationships are numbered 1 through 7 (the Nashville Number System):<br><br>
+            <strong>1</strong> = home base (the key chord)<br>
+            <strong>4</strong> = the lift (feels like rising)<br>
+            <strong>5</strong> = the tension (wants to resolve back to 1)<br>
+            <strong>6</strong> = the emotional one (minor, pulls at heartstrings)<br><br>
+            In the key of G: <strong>1=G, 4=C, 5=D, 6=Em</strong> <span style="color:var(--shape-color);">← New guitarists normally learn these chords first!</span><br>
+            In the key of C: <strong>1=C, 4=F, 5=G, 6=Am</strong><br>
+            In the key of D: <strong>1=D, 4=G, 5=A, 6=Bm</strong><br><br>
+            Same pattern, different starting point. Once you hear 1-4-5-6 in one key, you'll recognize it everywhere.<br><br>
+            <em style="color:var(--accent);">Try it:</em> Toggle Nashville Numbers on a loaded song. Watch how the same numbers appear regardless of which key you transpose to.
+          </div>
+        </div>
+
+        <!-- LEARN YOUR FIRST FOUR CHORDS -->
+        <div class="guide-item" style="border-left-color:var(--shape-color);padding:14px 12px;">
+          <div class="guide-label" style="color:var(--shape-color);font-size:0.88rem;">🎸 Learn Your First Four Chords</div>
+          <div class="guide-desc">
+            These four chords — <strong>G, Cadd9, D, and Em</strong> — are the 1, 4, 5, and 6 in the key of G. Learn them and you can play hundreds of songs. The secret? A clever finger pattern that minimizes hand movement between chords.<br><br>
+
+            <strong style="color:var(--accent);font-size:0.82rem;">Step 1: G Major (4 fingers)</strong><br>
+            <span style="display:inline-block;margin:6px 0;">
+              <svg width="180" height="110" viewBox="0 0 180 110" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;">
+                <rect x="20" y="20" width="140" height="3" rx="1.5" fill="#a89e90"/>
+                <line x1="20" y1="20" x2="20" y2="100" stroke="#4a423a" stroke-width="1"/>
+                <line x1="48" y1="20" x2="48" y2="100" stroke="#4a423a" stroke-width="1"/>
+                <line x1="76" y1="20" x2="76" y2="100" stroke="#4a423a" stroke-width="1"/>
+                <line x1="104" y1="20" x2="104" y2="100" stroke="#4a423a" stroke-width="1"/>
+                <line x1="132" y1="20" x2="132" y2="100" stroke="#4a423a" stroke-width="1"/>
+                <line x1="160" y1="20" x2="160" y2="100" stroke="#4a423a" stroke-width="1"/>
+                <line x1="20" y1="40" x2="160" y2="40" stroke="#3d362e" stroke-width="0.8"/>
+                <line x1="20" y1="60" x2="160" y2="60" stroke="#3d362e" stroke-width="0.8"/>
+                <line x1="20" y1="80" x2="160" y2="80" stroke="#3d362e" stroke-width="0.8"/>
+                <line x1="20" y1="100" x2="160" y2="100" stroke="#3d362e" stroke-width="0.8"/>
+                <!-- Open strings D, G -->
+                <circle cx="76" cy="13" r="4" fill="none" stroke="#a89e90" stroke-width="1"/>
+                <circle cx="104" cy="13" r="4" fill="none" stroke="#a89e90" stroke-width="1"/>
+                <!-- Finger 1 (index) on A/fret 2 -->
+                <circle cx="48" cy="50" r="8" fill="#5ba3d9"/><text x="48" y="54" text-anchor="middle" font-size="10" fill="white" font-weight="700" font-family="sans-serif">1</text>
+                <!-- Finger 2 (middle) on low E/fret 3 -->
+                <circle cx="20" cy="70" r="8" fill="#e8a85c"/><text x="20" y="74" text-anchor="middle" font-size="10" fill="white" font-weight="700" font-family="sans-serif">2</text>
+                <!-- Finger 3 (ring) on B/fret 3 -->
+                <circle cx="132" cy="70" r="8" fill="#6db56d"/><text x="132" y="74" text-anchor="middle" font-size="10" fill="white" font-weight="700" font-family="sans-serif">3</text>
+                <!-- Finger 4 (pinky) on high E/fret 3 -->
+                <circle cx="160" cy="70" r="8" fill="#c27adb"/><text x="160" y="74" text-anchor="middle" font-size="10" fill="white" font-weight="700" font-family="sans-serif">4</text>
+              </svg>
+            </span><br>
+            <span style="color:var(--text-muted);font-size:0.7rem;">
+              <span style="color:#5ba3d9;">●1</span> Index: A string, fret 2 &nbsp;
+              <span style="color:#e8a85c;">●2</span> Middle: low E, fret 3 &nbsp;
+              <span style="color:#6db56d;">●3</span> Ring: B string, fret 3 &nbsp;
+              <span style="color:#c27adb;">●4</span> Pinky: high E, fret 3 &nbsp;
+              D and G strings open
+            </span><br><br>
+
+            <strong style="color:var(--accent);font-size:0.82rem;">Step 2: Cadd9 — Move only two fingers!</strong><br>
+            <span style="display:inline-block;margin:6px 0;">
+              <svg width="180" height="110" viewBox="0 0 180 110" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;">
+                <rect x="20" y="20" width="140" height="3" rx="1.5" fill="#a89e90"/>
+                <line x1="20" y1="20" x2="20" y2="100" stroke="#4a423a" stroke-width="1"/>
+                <line x1="48" y1="20" x2="48" y2="100" stroke="#4a423a" stroke-width="1"/>
+                <line x1="76" y1="20" x2="76" y2="100" stroke="#4a423a" stroke-width="1"/>
+                <line x1="104" y1="20" x2="104" y2="100" stroke="#4a423a" stroke-width="1"/>
+                <line x1="132" y1="20" x2="132" y2="100" stroke="#4a423a" stroke-width="1"/>
+                <line x1="160" y1="20" x2="160" y2="100" stroke="#4a423a" stroke-width="1"/>
+                <line x1="20" y1="40" x2="160" y2="40" stroke="#3d362e" stroke-width="0.8"/>
+                <line x1="20" y1="60" x2="160" y2="60" stroke="#3d362e" stroke-width="0.8"/>
+                <line x1="20" y1="80" x2="160" y2="80" stroke="#3d362e" stroke-width="0.8"/>
+                <line x1="20" y1="100" x2="160" y2="100" stroke="#3d362e" stroke-width="0.8"/>
+                <!-- Mute low E -->
+                <text x="20" y="13" text-anchor="middle" font-size="10" fill="#6b6158" font-family="monospace">✕</text>
+                <!-- Open G string -->
+                <circle cx="104" cy="13" r="4" fill="none" stroke="#a89e90" stroke-width="1"/>
+                <!-- Finger 1 (index) on D/fret 2 — MOVED DOWN from A -->
+                <circle cx="76" cy="50" r="8" fill="#5ba3d9"/><text x="76" y="54" text-anchor="middle" font-size="10" fill="white" font-weight="700" font-family="sans-serif">1</text>
+                <!-- Finger 2 (middle) on A/fret 3 — MOVED DOWN from low E -->
+                <circle cx="48" cy="70" r="8" fill="#e8a85c"/><text x="48" y="74" text-anchor="middle" font-size="10" fill="white" font-weight="700" font-family="sans-serif">2</text>
+                <!-- Finger 3 (ring) on B/fret 3 — STAYS PUT -->
+                <circle cx="132" cy="70" r="8" fill="#6db56d"/><text x="132" y="74" text-anchor="middle" font-size="10" fill="white" font-weight="700" font-family="sans-serif">3</text>
+                <!-- Finger 4 (pinky) on high E/fret 3 — STAYS PUT -->
+                <circle cx="160" cy="70" r="8" fill="#c27adb"/><text x="160" y="74" text-anchor="middle" font-size="10" fill="white" font-weight="700" font-family="sans-serif">4</text>
+              </svg>
+            </span><br>
+            <span style="color:var(--text-muted);font-size:0.7rem;">
+              <span style="color:#5ba3d9;">●1</span> Index: D string, fret 2 &nbsp;
+              <span style="color:#e8a85c;">●2</span> Middle: A string, fret 3 &nbsp;
+              <span style="color:#6db56d;">●3</span> Ring: B/fret 3 <strong>(stays!)</strong> &nbsp;
+              <span style="color:#c27adb;">●4</span> Pinky: high E/fret 3 <strong>(stays!)</strong> &nbsp;
+              Skip low E
+            </span><br><br>
+            <div style="background:rgba(109,181,109,0.08);border:1px solid rgba(109,181,109,0.2);border-radius:6px;padding:8px 10px;margin:4px 0;font-size:0.74rem;">
+              <strong style="color:var(--shape-color);">🎯 The Pivot:</strong> Ring finger (3) and Pinky (4) <strong>don't move at all</strong> between G and Cadd9. Only your Index and Middle fingers each drop down one string. That's it!<br><br>
+              <strong>Practice:</strong> G → Cadd9 → G → Cadd9, back and forth. Focus on keeping fingers 3 and 4 planted. This is your very first chord change — and it's one of the easiest you'll ever learn.
+            </div><br>
+
+            <strong style="color:var(--accent);font-size:0.82rem;">Step 3: Add D — Your ring finger is the anchor</strong><br>
+            <span style="display:inline-block;margin:6px 0;">
+              <svg width="180" height="110" viewBox="0 0 180 110" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;">
+                <rect x="20" y="20" width="140" height="3" rx="1.5" fill="#a89e90"/>
+                <line x1="20" y1="20" x2="20" y2="100" stroke="#4a423a" stroke-width="1"/>
+                <line x1="48" y1="20" x2="48" y2="100" stroke="#4a423a" stroke-width="1"/>
+                <line x1="76" y1="20" x2="76" y2="100" stroke="#4a423a" stroke-width="1"/>
+                <line x1="104" y1="20" x2="104" y2="100" stroke="#4a423a" stroke-width="1"/>
+                <line x1="132" y1="20" x2="132" y2="100" stroke="#4a423a" stroke-width="1"/>
+                <line x1="160" y1="20" x2="160" y2="100" stroke="#4a423a" stroke-width="1"/>
+                <line x1="20" y1="40" x2="160" y2="40" stroke="#3d362e" stroke-width="0.8"/>
+                <line x1="20" y1="60" x2="160" y2="60" stroke="#3d362e" stroke-width="0.8"/>
+                <line x1="20" y1="80" x2="160" y2="80" stroke="#3d362e" stroke-width="0.8"/>
+                <line x1="20" y1="100" x2="160" y2="100" stroke="#3d362e" stroke-width="0.8"/>
+                <!-- Mute low E and A -->
+                <text x="20" y="13" text-anchor="middle" font-size="10" fill="#6b6158" font-family="monospace">✕</text>
+                <text x="48" y="13" text-anchor="middle" font-size="10" fill="#6b6158" font-family="monospace">✕</text>
+                <!-- Open D string -->
+                <circle cx="76" cy="13" r="4" fill="none" stroke="#a89e90" stroke-width="1"/>
+                <!-- Finger 1 (index) on G/fret 2 -->
+                <circle cx="104" cy="50" r="8" fill="#5ba3d9"/><text x="104" y="54" text-anchor="middle" font-size="10" fill="white" font-weight="700" font-family="sans-serif">1</text>
+                <!-- Finger 3 (ring) on B/fret 3 — STILL THE ANCHOR -->
+                <circle cx="132" cy="70" r="8" fill="#6db56d"/><text x="132" y="74" text-anchor="middle" font-size="10" fill="white" font-weight="700" font-family="sans-serif">3</text>
+                <!-- Finger 2 (middle) on high E/fret 2 -->
+                <circle cx="160" cy="50" r="8" fill="#e8a85c"/><text x="160" y="54" text-anchor="middle" font-size="10" fill="white" font-weight="700" font-family="sans-serif">2</text>
+              </svg>
+            </span><br>
+            <span style="color:var(--text-muted);font-size:0.7rem;">
+              <span style="color:#5ba3d9;">●1</span> Index: G string, fret 2 &nbsp;
+              <span style="color:#e8a85c;">●2</span> Middle: high E, fret 2 &nbsp;
+              <span style="color:#6db56d;">●3</span> Ring: B/fret 3 <strong>(still the anchor!)</strong> &nbsp;
+              Open D string
+            </span><br><br>
+            <div style="background:rgba(109,181,109,0.08);border:1px solid rgba(109,181,109,0.2);border-radius:6px;padding:8px 10px;margin:4px 0;font-size:0.74rem;">
+              <strong style="color:var(--shape-color);">🎯 The Pivot:</strong> Your ring finger (3) stays on B string, fret 3 for <strong>all three chords</strong> — G, Cadd9, and D. It's your anchor point.<br><br>
+              <strong>Practice patterns:</strong><br>
+              • G → Cadd9 → D → Cadd9 → G (repeat)<br>
+              • G → D → Cadd9 → D → G → D → Cadd9 → D (repeat)<br>
+              Take it slow. Speed comes with muscle memory.
+            </div><br>
+
+            <strong style="color:var(--accent);font-size:0.82rem;">Step 4: Add Em — Your first full progression!</strong><br>
+            <span style="display:inline-block;margin:6px 0;">
+              <svg width="180" height="110" viewBox="0 0 180 110" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;">
+                <rect x="20" y="20" width="140" height="3" rx="1.5" fill="#a89e90"/>
+                <line x1="20" y1="20" x2="20" y2="100" stroke="#4a423a" stroke-width="1"/>
+                <line x1="48" y1="20" x2="48" y2="100" stroke="#4a423a" stroke-width="1"/>
+                <line x1="76" y1="20" x2="76" y2="100" stroke="#4a423a" stroke-width="1"/>
+                <line x1="104" y1="20" x2="104" y2="100" stroke="#4a423a" stroke-width="1"/>
+                <line x1="132" y1="20" x2="132" y2="100" stroke="#4a423a" stroke-width="1"/>
+                <line x1="160" y1="20" x2="160" y2="100" stroke="#4a423a" stroke-width="1"/>
+                <line x1="20" y1="40" x2="160" y2="40" stroke="#3d362e" stroke-width="0.8"/>
+                <line x1="20" y1="60" x2="160" y2="60" stroke="#3d362e" stroke-width="0.8"/>
+                <line x1="20" y1="80" x2="160" y2="80" stroke="#3d362e" stroke-width="0.8"/>
+                <line x1="20" y1="100" x2="160" y2="100" stroke="#3d362e" stroke-width="0.8"/>
+                <!-- All open except A and D -->
+                <circle cx="20" cy="13" r="4" fill="none" stroke="#a89e90" stroke-width="1"/>
+                <circle cx="104" cy="13" r="4" fill="none" stroke="#a89e90" stroke-width="1"/>
+                <circle cx="132" cy="13" r="4" fill="none" stroke="#a89e90" stroke-width="1"/>
+                <circle cx="160" cy="13" r="4" fill="none" stroke="#a89e90" stroke-width="1"/>
+                <!-- Finger 2 (middle) on A/fret 2 -->
+                <circle cx="48" cy="50" r="8" fill="#e8a85c"/><text x="48" y="54" text-anchor="middle" font-size="10" fill="white" font-weight="700" font-family="sans-serif">2</text>
+                <!-- Finger 3 (ring) on D/fret 2 -->
+                <circle cx="76" cy="50" r="8" fill="#6db56d"/><text x="76" y="54" text-anchor="middle" font-size="10" fill="white" font-weight="700" font-family="sans-serif">3</text>
+              </svg>
+            </span><br>
+            <span style="color:var(--text-muted);font-size:0.7rem;">
+              <span style="color:#e8a85c;">●2</span> Middle: A string, fret 2 &nbsp;
+              <span style="color:#6db56d;">●3</span> Ring: D string, fret 2 &nbsp;
+              All other strings open — just two fingers!
+            </span><br><br>
+            <div style="background:rgba(232,168,92,0.08);border:1px solid rgba(232,168,92,0.2);border-radius:6px;padding:8px 10px;margin:4px 0;font-size:0.74rem;">
+              <strong style="color:var(--accent);">🎉 You now have a full 1-4-5-6 progression in the key of G!</strong><br>
+              G(1) → Cadd9(4) → D(5) → Em(6) — this chord pattern is in hundreds of popular songs.<br><br>
+              <strong>Practice mixing all four:</strong><br>
+              • G → Cadd9 → D → Em (repeat)<br>
+              • G → Em → Cadd9 → D (repeat)<br>
+              • Em → Cadd9 → G → D (repeat)<br><br>
+              Search online for <strong>"simple songs in the key of G"</strong> to find songs you can play with just these four chords. You'll be surprised how many there are!<br><br>
+              <strong style="color:var(--accent);">💡 Pro tip:</strong> Paste any song into Fretboard Distillery, set <strong>Play Shapes In</strong> to G, and the tool converts it to these four chords with a capo. You're not limited to songs originally in G — you can play songs in <em>any</em> key using the shapes you just learned.
+            </div>
+          </div>
+        </div>
+
+        <!-- EXPAND TO KEY OF C -->
+        <div class="guide-item" style="border-left-color:var(--key-color);">
+          <div class="guide-label" style="color:var(--key-color);">Next Step: The Key of C — Your Second Chord Family</div>
+          <div class="guide-desc">
+            Once you're comfortable with G, Cadd9, D, and Em, it's time to add the key of C. The 1-4-5-6 in C is: <strong>C, F, G, Am</strong>.<br><br>
+            You already know G! And Am is just two fingers (similar to Em but shifted). That leaves C and F.<br><br>
+            <strong>C major</strong> — you already know this shape from Cadd9. Just lift the pinky off the high E string: x32010.<br><br>
+            <strong>F major</strong> — here's where most beginners hit a wall, because F is traditionally a barre chord. But there's a brilliant workaround:<br><br>
+            <strong style="color:var(--shape-color);">Use Fmaj7 instead of F!</strong> It's essentially a C shape with fingers 1 and 2 dropped down one string each — the same pivot concept you already learned with G and Cadd9. The voicing is xx3210, and it sounds beautiful. Nobody will notice you're not playing a full F.<br><br>
+            <div style="background:rgba(91,163,217,0.08);border:1px solid rgba(91,163,217,0.2);border-radius:6px;padding:8px 10px;margin:4px 0;font-size:0.74rem;">
+              <strong style="color:var(--key-color);">You now have two chord families:</strong><br>
+              • <strong>Key of G:</strong> G, Cadd9, D, Em<br>
+              • <strong>Key of C:</strong> C, Fmaj7, G, Am<br><br>
+              Between these two families, you can play a massive range of songs. And remember — Fretboard Distillery can convert any song into either of these families using a capo. Set <strong>Shapes to G</strong> or <strong>Shapes to C</strong>, and the tool does the rest.
+            </div>
+          </div>
+        </div>
+
+        <!-- 12 NOTES -->
         <div class="guide-item" style="border-left-color:var(--key-color);">
           <div class="guide-label" style="color:var(--key-color);">The 12 Notes — That's All There Is</div>
           <div class="guide-desc">
@@ -401,6 +610,7 @@ select:focus{outline:none;border-color:var(--accent-dim);}
           </div>
         </div>
 
+        <!-- CAPO -->
         <div class="guide-item" style="border-left-color:var(--capo-color);">
           <div class="guide-label" style="color:var(--capo-color);">What a Capo Actually Does</div>
           <div class="guide-desc">
@@ -411,6 +621,7 @@ select:focus{outline:none;border-color:var(--accent-dim);}
           </div>
         </div>
 
+        <!-- WHY SOME KEYS ARE HARDER -->
         <div class="guide-item" style="border-left-color:var(--shape-color);">
           <div class="guide-label" style="color:var(--shape-color);">Why Some Keys Are Harder Than Others</div>
           <div class="guide-desc">
@@ -421,22 +632,7 @@ select:focus{outline:none;border-color:var(--accent-dim);}
           </div>
         </div>
 
-        <div class="guide-item" style="border-left-color:var(--nash-color);">
-          <div class="guide-label" style="color:var(--nash-color);">The 1-4-5-6 Pattern — The DNA of Most Songs</div>
-          <div class="guide-desc">
-            Most popular songs use the same <em>relationships</em> between chords, just in different keys. These relationships are numbered 1 through 7 (the Nashville Number System):<br><br>
-            <strong>1</strong> = home base (the key chord)<br>
-            <strong>4</strong> = the lift (feels like rising)<br>
-            <strong>5</strong> = the tension (wants to resolve back to 1)<br>
-            <strong>6</strong> = the emotional one (minor, pulls at heartstrings)<br><br>
-            In the key of G: <strong>1=G, 4=C, 5=D, 6=Em</strong><br>
-            In the key of C: <strong>1=C, 4=F, 5=G, 6=Am</strong><br>
-            In the key of D: <strong>1=D, 4=G, 5=A, 6=Bm</strong><br><br>
-            Same pattern, different starting point. Once you hear 1-4-5-6 in one key, you'll recognize it everywhere.<br><br>
-            <em style="color:var(--accent);">Try it:</em> Toggle Nashville Numbers on a loaded song. Watch how the same numbers appear regardless of which key you transpose to.
-          </div>
-        </div>
-
+        <!-- BARRE CHORD ALTERNATIVES -->
         <div class="guide-item" style="border-left-color:var(--chord-color);">
           <div class="guide-label" style="color:var(--chord-color);">Barre Chord Alternatives — You Don't Need Them</div>
           <div class="guide-desc">
@@ -452,6 +648,7 @@ select:focus{outline:none;border-color:var(--accent-dim);}
           </div>
         </div>
 
+        <!-- CHORD FAMILIES -->
         <div class="guide-item" style="border-left-color:var(--text-dim);">
           <div class="guide-label" style="color:var(--text-dim);">Chord Families — Why Certain Chords Belong Together</div>
           <div class="guide-desc">
@@ -611,7 +808,10 @@ That saved a wretch like me"></textarea>
   <!-- OUTPUT -->
   <div class="section song-output" id="outputSection">
     <div class="print-title" id="printTitle"></div>
-    <div class="section-title"><span class="icon">♪</span> Chord Sheet</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+      <span class="icon" style="font-size:1rem;opacity:0.7;">♪</span>
+      <input type="text" id="songTitleInput" class="song-title-input" placeholder="Song title (click to edit)" value="">
+    </div>
     <div class="song-meta" id="songMeta"></div>
     <div class="edit-hint" id="editHint">
       <strong>✎ Editing Chord Positions</strong><br>
@@ -671,6 +871,9 @@ That saved a wretch like me"></textarea>
     <span class="pp-info" id="ppInfo">1 page</span>
     <button class="btn btn-primary btn-sm" id="ppPrint">🖨 Print Now</button>
     <button class="btn btn-secondary btn-sm" id="ppClose">✕ Close</button>
+  </div>
+  <div class="pp-print-tip" style="max-width:860px;width:100%;margin:0 auto 10px;padding:8px 16px;background:rgba(232,168,92,0.08);border:1px solid rgba(232,168,92,0.2);border-radius:6px;font-size:0.72rem;color:#a89e90;line-height:1.5;text-align:center;">
+    <strong style="color:#e8a85c;">Print tip:</strong> In the print dialog, set <strong style="color:#e8e0d4;">Margins</strong> to <strong style="color:#e8e0d4;">None</strong> (or Minimum) and uncheck <strong style="color:#e8e0d4;">Headers and footers</strong> for best results.
   </div>
   <div id="ppPages"></div>
 </div>
@@ -1190,6 +1393,7 @@ function loadFBA(text){
     state.nashvilleMode=data.nashvilleMode||false;
     state.positionEdits=data.positionEdits||{};
     state.loaded=true;
+    document.getElementById('songTitleInput').value=state.title;
     document.getElementById('controlsSection').style.display='';
     updateDisplays();renderSongSheet();
     document.getElementById('controlsSection').scrollIntoView({behavior:'smooth'});
@@ -1794,6 +1998,7 @@ function loadSong(text){
   state.soundingKey=noteName(noteIndex(p.key)+p.capo,prefersFlats(p.key));
   state.shapeKey=p.key;state.capo=p.capo;state.loaded=true;
   state.positionEdits={};state.editMode=false;selectedChordEl=null;
+  document.getElementById('songTitleInput').value=state.title;
   document.getElementById('controlsSection').style.display='';
   updateDisplays();renderSongSheet();
   document.getElementById('controlsSection').scrollIntoView({behavior:'smooth'});
@@ -1811,6 +2016,7 @@ document.getElementById('capoUp').addEventListener('click',()=>{if(state.capo>=1
 document.getElementById('capoDown').addEventListener('click',()=>{if(state.capo<=0)return;state.capo--;state.soundingKey=computeSoundingKey(state.shapeKey,state.capo);updateDisplays();renderSongSheet();});
 document.getElementById('nashvilleToggle').addEventListener('click',()=>{state.nashvilleMode=!state.nashvilleMode;updateDisplays();renderSongSheet();});
 document.getElementById('sparseToggle').addEventListener('click',()=>{state.sparseMode=!state.sparseMode;updateDisplays();renderSongSheet();});
+document.getElementById('songTitleInput').addEventListener('input',function(){state.title=this.value;});
 document.getElementById('editToggle').addEventListener('click',()=>{
   state.editMode=!state.editMode;
   if(!state.editMode){selectedChordEl=null;}
@@ -1830,9 +2036,9 @@ document.getElementById('ppSparse').addEventListener('change',rebuildPreview);
 //  PRINT PREVIEW ENGINE
 // ============================================================
 const PAGE_W=816,PAGE_H=1056; // Letter at 96dpi
-const PAGE_PAD_X=52,PAGE_PAD_Y=48;
-const CONTENT_W=PAGE_W-PAGE_PAD_X*2; // 712px
-const CONTENT_H=PAGE_H-PAGE_PAD_Y*2; // 960px
+const PAGE_PAD_X=40,PAGE_PAD_Y=36;
+const CONTENT_W=PAGE_W-PAGE_PAD_X*2; // 736px
+const CONTENT_H=PAGE_H-PAGE_PAD_Y*2; // 984px
 const HEADER_H=42; // title + meta + border
 const COL_GAP=28;
 
