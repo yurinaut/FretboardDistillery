@@ -294,6 +294,7 @@ select:focus{outline:none;border-color:var(--accent-dim);}
   .pp-page:last-child{page-break-after:avoid;}
 }
 .print-title{display:none;}
+#saveDropdown button:hover{background:rgba(232,168,92,0.12);}
 </style>
 </head>
 <body>
@@ -332,13 +333,13 @@ select:focus{outline:none;border-color:var(--accent-dim);}
         <button class="btn btn-secondary btn-sm" id="guideClose">✕ Close</button>
       </div>
       <div class="guide-body">
-        <div class="guide-item"><div class="guide-label">Paste or Open a Song</div><div class="guide-desc">Paste chord/lyric text, open a file (.txt, .docx, .cho, .fba), or try the demo. Chords go on the line above lyrics.</div></div>
+        <div class="guide-item"><div class="guide-label">Paste or Open a Song</div><div class="guide-desc">Paste chord/lyric text, open a file (.txt, .docx, .cho, .chordpro, .fba), or try the demo. Chords go on the line above lyrics.</div></div>
         <div class="guide-item"><div class="guide-label">Transpose with Shapes + Capo</div><div class="guide-desc">Pick the <strong>Key</strong> the audience hears, then the <strong>Shape Key</strong> your fingers play. Capo auto-calculates. Or nudge capo manually.</div></div>
         <div class="guide-item"><div class="guide-label">♯ Nashville Numbers</div><div class="guide-desc">Toggle to replace chords with scale-degree numbers (1, 4, 5⁻, etc.). Numbers stay the same in every key. Full NNS reference table in the ☰ menu.</div></div>
         <div class="guide-item"><div class="guide-label">✎ Edit Chord Positions</div><div class="guide-desc">Click the button, click any chord, then <strong>arrow keys</strong> or <strong>Space/Backspace</strong> to slide it over the correct syllable.</div></div>
         <div class="guide-item"><div class="guide-label">Chord Diagrams &amp; Simplified Voicings</div><div class="guide-desc">Each chord shows a fretboard diagram. Common chords include a simpler alternative that's easier to play.</div></div>
         <div class="guide-item"><div class="guide-label">☰ Sparse Chart</div><div class="guide-desc">A compact roadmap showing just section names and chord progressions — no lyrics. Available in Performance Mode and Print Preview. Use <strong>📋 Copy</strong> to paste it into any document.</div></div>
-        <div class="guide-item"><div class="guide-label">💾 Save &amp; Reopen</div><div class="guide-desc">Save as <strong>.fba</strong> — stores song, settings, and position edits. Name your file and reopen from the Open File tab.</div></div>
+        <div class="guide-item"><div class="guide-label">💾 Save &amp; Reopen</div><div class="guide-desc">Save as <strong>.txt</strong> (editable document with chords and lyrics) or <strong>.fba</strong> (project file with all settings). Reopen .fba files from the Open File tab.</div></div>
         <div class="guide-item"><div class="guide-label">🖨 Smart Print Preview</div><div class="guide-desc">Auto-fits to fewest pages. Choose 1 or 2 columns, font size (9–12pt), spacing. Options for chord diagrams and sparse chart mode.</div></div>
         <div class="guide-item"><div class="guide-label">▶ Performance Mode</div><div class="guide-desc">Fullscreen chord sheet with auto-scroll (15-sec countdown to get ready), adjustable speed, optional metronome with BPM control, sparse chart toggle, and copy to clipboard.</div></div>
       </div>
@@ -358,7 +359,7 @@ select:focus{outline:none;border-color:var(--accent-dim);}
           <div class="guide-desc">
             Paste a chord sheet directly into the input area — chords go on the line above the lyrics they belong to. Section labels like <strong>[Verse]</strong> and <strong>[Chorus]</strong> help organize the chart.<br><br>
             <strong>From a website?</strong> On the chord site, select the chords and lyrics, copy them (Ctrl+C / Cmd+C), and paste into Fretboard Distillery. We automatically clean up formatting from sites like Ultimate Guitar.<br><br>
-            You can also open files: <strong>.txt</strong>, <strong>.docx</strong> (Word), <strong>.cho</strong> (ChordPro), or <strong>.fba</strong> (previously saved from this tool).
+            You can also open files: <strong>.txt</strong>, <strong>.docx</strong> (Word), <strong>.cho</strong> / <strong>.chordpro</strong> (ChordPro), or <strong>.fba</strong> (previously saved from this tool).
           </div>
         </div>
         <div class="guide-item" style="border-left-color:var(--shape-color);">
@@ -382,7 +383,7 @@ select:focus{outline:none;border-color:var(--accent-dim);}
           <div class="guide-desc">
             <strong>▶ Performance Mode:</strong> Fullscreen chord sheet with auto-scroll. Hit Play and a 15-second countdown gives you time to grab your guitar. Adjust speed with +/−. Turn on the metronome for a click track — it starts immediately when you hit Play so you can count in.<br><br>
             <strong>🖨 Print:</strong> Opens a smart preview that auto-fits your song to the fewest pages. Choose 1 or 2 columns, font size, and whether to include chord diagrams or a sparse chart.<br><br>
-            <strong>💾 Save:</strong> Saves your song as a .fba file with all your settings — key, capo, position edits, everything. Reopen it anytime from the Open File tab.
+            <strong>💾 Save:</strong> Click Save to choose your format — <strong>.txt</strong> exports an editable document with your transposed chords and lyrics, while <strong>.fba</strong> saves the full project (key, capo, position edits, everything) so you can reopen it later from the Open File tab.
           </div>
         </div>
       </div>
@@ -1017,14 +1018,14 @@ That saved a wretch like me"></textarea>
 
     <div class="tab-content" id="tab-file">
       <div class="file-row">
-        <input type="file" id="fileInput" accept=".txt,.cho,.chordpro,.fba,.docx">
+        <input type="file" id="fileInput" accept=".txt,.cho,.chordpro,.chopro,.pro,.fba,.docx">
         <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
           📂 Choose File
         </button>
         <span id="fileName" style="font-size:0.78rem;color:var(--text-dim);">No file selected</span>
       </div>
       <div class="format-hint" style="margin-top:10px;">
-        Supported: <code>.txt</code> <code>.cho</code> (ChordPro) <code>.docx</code> (Word) <code>.fba</code> (Fretboard Distillery native)
+        Supported: <code>.txt</code> <code>.cho</code> <code>.chordpro</code> <code>.chopro</code> (ChordPro) <code>.docx</code> (Word) <code>.fba</code> (Fretboard Distillery native)
       </div>
     </div>
 
@@ -1074,7 +1075,13 @@ That saved a wretch like me"></textarea>
       <button class="btn btn-toggle" id="nashvilleToggle">♯ Nashville</button>
       <button class="btn btn-toggle" id="sparseToggle">☰ Sparse</button>
       <button class="btn btn-edit" id="editToggle">✎ Edit Positions</button>
-      <button class="btn btn-primary" id="saveBtn">💾 Save .fba</button>
+      <div style="position:relative;display:inline-block;" id="saveDropdownWrap">
+        <button class="btn btn-primary" id="saveBtn">💾 Save</button>
+        <div id="saveDropdown" style="display:none;position:absolute;bottom:100%;left:0;margin-bottom:4px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:4px 0;min-width:200px;box-shadow:0 4px 16px rgba(0,0,0,0.4);z-index:50;">
+          <button class="btn" id="saveTxtBtn" style="display:block;width:100%;text-align:left;border:none;border-radius:0;padding:8px 14px;font-size:0.78rem;color:var(--text);background:none;cursor:pointer;">📄 Save as Document (.txt)</button>
+          <button class="btn" id="saveFbaBtn" style="display:block;width:100%;text-align:left;border:none;border-radius:0;padding:8px 14px;font-size:0.78rem;color:var(--text);background:none;cursor:pointer;">📦 Save as FD Project (.fba)</button>
+        </div>
+      </div>
       <button class="btn btn-secondary" id="perfQuickBtn" title="Performance Mode" style="padding:9px 12px;">▶</button>
       <button class="btn btn-secondary" id="resetBtn">↺ New Song</button>
     </div>
@@ -1657,6 +1664,31 @@ function saveFBA(){
   showToast('Saved: '+a.download);
 }
 
+function saveTxt(){
+  const defaultName=(state.title||'song').replace(/[^a-zA-Z0-9_\- ]/g,'').replace(/\s+/g,'_');
+  const userInput=prompt('Save as:',defaultName);
+  if(!userInput)return;
+  const safeName=userInput.trim().replace(/[^a-zA-Z0-9_\- ]/g,'').replace(/\s+/g,'_')||'song';
+
+  // Build text content with metadata header
+  const lines=getPrintLines();
+  let txt='';
+  if(state.title)txt+=state.title+'\n';
+  txt+='Key: '+state.soundingKey;
+  if(state.capo>0)txt+='  |  Capo: '+state.capo;
+  txt+='\n\n';
+  txt+=lines.join('\n');
+
+  const blob=new Blob([txt],{type:'text/plain'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=safeName+'.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Saved: '+a.download);
+}
+
 function loadFBA(text){
   try{
     const data=JSON.parse(text);
@@ -1710,10 +1742,52 @@ document.getElementById('fileInput').addEventListener('change',async function(){
     return;
   }
 
-  // Plain text / ChordPro
-  const text=await file.text();
+  // For .pro files, check if binary (ProPresenter) or text (ChordPro)
+  if(ext==='pro'){
+    const arrayBuffer=await file.arrayBuffer();
+    const bytes=new Uint8Array(arrayBuffer);
+    // Check if first 64 bytes contain non-text characters (binary detection)
+    let isBinary=false;
+    const checkLen=Math.min(bytes.length,64);
+    for(let i=0;i<checkLen;i++){
+      const b=bytes[i];
+      if(b<9||(b>13&&b<32&&b!==27))  {isBinary=true;break;}
+    }
+    if(isBinary){
+      alert('This appears to be a ProPresenter file (.pro), which uses a binary format that Fretboard Distillery cannot import directly.\n\nTo import this song, try one of these:\n• In ProPresenter, export the song as plain text or ChordPro\n• Copy the chord sheet from another source and paste it here');
+      return;
+    }
+    // Text-based .pro file — treat as ChordPro
+    const text=new TextDecoder().decode(bytes);
+    const processed=parseChordPro(text);
+    document.getElementById('songInput').value=processed;
+    document.querySelectorAll('.input-tab')[0].click();
+    showToast('ChordPro file loaded — review and click Parse');
+    return;
+  }
+
+  // Plain text / ChordPro (.txt, .cho, .chordpro, .chopro)
+  let text;
+  try{
+    text=await file.text();
+  }catch(e){
+    // Binary detection fallback for any file type
+    alert('This file could not be read as text. Please make sure it is a plain text chord sheet or ChordPro file.');
+    return;
+  }
+  // Check for binary content in any text file
+  let hasBinary=false;
+  for(let i=0;i<Math.min(text.length,128);i++){
+    const c=text.charCodeAt(i);
+    if(c<9||(c>13&&c<32&&c!==27)){hasBinary=true;break;}
+  }
+  if(hasBinary){
+    alert('This file appears to contain binary data and cannot be imported as a chord sheet.\n\nPlease use a plain text (.txt), ChordPro (.cho/.chordpro), Word (.docx), or Fretboard Distillery (.fba) file.');
+    return;
+  }
+
   let processed=text;
-  if(ext==='cho'||ext==='chordpro'||text.includes('{title')||text.includes('{key')){
+  if(ext==='cho'||ext==='chordpro'||ext==='chopro'||text.includes('{title')||text.includes('{key')){
     processed=parseChordPro(text);
   }
   document.getElementById('songInput').value=processed;
@@ -2300,7 +2374,17 @@ document.getElementById('editToggle').addEventListener('click',()=>{
   if(!state.editMode){selectedChordEl=null;}
   updateDisplays();renderSongSheet();
 });
-document.getElementById('saveBtn').addEventListener('click',saveFBA);
+// Save dropdown
+const saveDropdown=document.getElementById('saveDropdown');
+document.getElementById('saveBtn').addEventListener('click',function(e){
+  e.stopPropagation();
+  saveDropdown.style.display=saveDropdown.style.display==='none'?'block':'none';
+});
+document.getElementById('saveTxtBtn').addEventListener('click',function(){saveDropdown.style.display='none';saveTxt();});
+document.getElementById('saveFbaBtn').addEventListener('click',function(){saveDropdown.style.display='none';saveFBA();});
+document.addEventListener('click',function(e){
+  if(!document.getElementById('saveDropdownWrap').contains(e.target))saveDropdown.style.display='none';
+});
 document.getElementById('printBtn').addEventListener('click',openPrintPreview);
 document.getElementById('ppClose').addEventListener('click',closePrintPreview);
 document.getElementById('ppPrint').addEventListener('click',()=>window.print());
